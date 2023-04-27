@@ -59,6 +59,9 @@ table {
 .open {
   background-color: #FFF;
 }
+.trap {
+  background-color: black;
+}
 
 .circle {
   border-radius: 100px;

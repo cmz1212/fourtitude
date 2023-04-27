@@ -8,7 +8,7 @@ class Row extends Component {
     let rowOutput = Object.keys(row).map(function(i) {
       
       //console.log(rowNum)
-      return (<Tile board={board} key={i} value={row[i]} columnIndex={i} rowIndex={rowNum} play={play} hover={hover} out={out}/>)
+      return (<Tile board={board}  key={i} value={row[i]} columnIndex={i} rowIndex={rowNum} play={play} hover={hover} out={out}/>)
     });
     //console.log("break")
     return (<tr>{rowOutput}</tr>)
