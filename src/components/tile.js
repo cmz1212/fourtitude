@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class Tile extends Component {
   render() {
-    const { play, columnIndex, rowIndex, hover, out, value, board, ifTop } =
+    const { play, columnIndex, rowIndex, hover, out, value, board, curr } =
       this.props;
     let space = "open";
 
@@ -16,32 +16,25 @@ class Tile extends Component {
 
     return (
       <td>
-        {ifTop ? (
+        {rowIndex === 0 ? (
           <div
+            
             className="top"
             onClick={() => play(columnIndex)}
-            onMouseOver={() => hover(value, columnIndex)}
-            // onMouseOut={() => out()}
+            onMouseOver={() => hover(board, columnIndex, curr)}
+            onMouseOut={() => out(columnIndex)}
           >
-          
-
-            <div
-              id={`top${columnIndex}`}
-              className={[space, "circle"].join(" ")}
-            ></div>
-            
+            <div id={`top${columnIndex}`} className={[space, "circle"].join(" ")}></div>
           </div>
         ) : (
           <div
             id={`${rowIndex}${columnIndex}`}
             className="tile"
             onClick={() => play(columnIndex)}
-            onMouseOver={() => hover(board, columnIndex)}
+            onMouseOver={() => hover(board, columnIndex, curr)}
             onMouseOut={() => out(columnIndex)}
           >
-            {/* <div className={["trap", "circle"].join(' ')}></div> */}
             <div className={[space, "circle"].join(" ")}></div>
-            {/* {console.log([space, "circle"].join(" "))} */}
           </div>
         )}
       </td>
