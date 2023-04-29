@@ -13,7 +13,8 @@ class Board extends Component {
       player1: 1,
       player2: 2,
       currentPlayer: null,
-     
+     p1Win:0,
+     p2Win:0,
       board: [],
       gameOver: false,
       traps: [[], [], []],
@@ -79,6 +80,7 @@ class Board extends Component {
   }
 
   play(c) {
+    const{p1Win, p2Win} = this.state;
     if (!this.state.gameOver) {
       for (let r = 1; r < c4rows + 1; r++) {
         for (let c = 0; c < c4columns; c++) {
@@ -98,10 +100,11 @@ class Board extends Component {
 
       let result = this.checkAll(board);
       if (result === this.state.player1) {
-        this.setState({ board, gameOver: true });
+        this.setState({ board, gameOver: true, p1Win:p1Win+1, });
+        
         alert("Player 1 wins!");
       } else if (result === this.state.player2) {
-        this.setState({ board, gameOver: true });
+        this.setState({ board, gameOver: true, p2Win:p2Win+1 });
         alert("Player 2 wins!");
       } else if (result === "draw") {
         this.setState({ board, gameOver: true });
@@ -244,7 +247,7 @@ class Board extends Component {
   }
 
   render() {
-    const { currentPlayer, board, traps } = this.state;
+    const { currentPlayer, board, traps, p1Win, p2Win } = this.state;
 
     return (
       <div>
@@ -256,6 +259,7 @@ class Board extends Component {
         >
           New Game
         </div>
+        <p>P1 {p1Win} : P2 {p2Win}</p>
         <table>
           <thead></thead>
           <tbody>
