@@ -13,7 +13,7 @@ class Board extends Component {
       player1: 1,
       player2: 2,
       currentPlayer: null,
-      top: [],
+     
       board: [],
       gameOver: false,
       traps: [[], [], []],
@@ -25,16 +25,16 @@ class Board extends Component {
   initBoard() {
     let board = [];
     let traps = [];
-    let top = [];
+   
 
     for (let i = 0; i < 3; i++) {
-      let x = Math.floor(Math.random() * 5);
+      let x = Math.floor(Math.random() * 5 + 1);
       let y = Math.floor(Math.random() * 5 + 1);
 
       traps.push([x, y]);
     }
     while (traps[1].toString() === traps[0].toString()) {
-      let x = Math.floor(Math.random() * 5);
+      let x = Math.floor(Math.random() * 5 + 1);
       let y = Math.floor(Math.random() * 5 + 1);
       traps[1].splice(0, 2, x, y);
     }
@@ -42,16 +42,12 @@ class Board extends Component {
       traps[2].toString() === traps[0].toString() ||
       traps[2].toString() === traps[1].toString()
     ) {
-      let x = Math.floor(Math.random() * 5);
+      let x = Math.floor(Math.random() * 5 + 1);
       let y = Math.floor(Math.random() * 5 + 1);
       traps[2].splice(0, 2, x, y);
     }
-    let top_row = [];
-    for (let c = 0; c < c4columns; c++) {
-      top_row.push(null);
-    }
-    top.push(top_row);
-    for (let r = 0; r < c4rows; r++) {
+   
+    for (let r = 0; r < c4rows + 1; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
         if (r === traps[0][0] && c === traps[0][1]) {
@@ -69,7 +65,7 @@ class Board extends Component {
 
     this.setState({
       board,
-      top,
+      
       currentPlayer: this.state.player1,
       gameOver: false,
       traps,
@@ -84,14 +80,14 @@ class Board extends Component {
 
   play(c) {
     if (!this.state.gameOver) {
-      for (let r = 0; r < c4rows; r++) {
+      for (let r = 1; r < c4rows + 1; r++) {
         for (let c = 0; c < c4columns; c++) {
           const name = r.toString() + c.toString();
           document.getElementById(name).className = "tile";
         }
       }
       let board = this.state.board;
-      for (let r = 5; r >= 0; r--) {
+      for (let r = 6; r >= 1; r--) {
         if (!board[r][c] || board[r][c] === 3) {
           board[r][c] = this.state.currentPlayer;
           const name = r.toString() + c.toString();
@@ -112,15 +108,30 @@ class Board extends Component {
         alert("It's a draw!");
       } else {
         this.setState({ board, currentPlayer: this.togglePlayer() });
+        let c_name;
+        if (this.state.currentPlayer === 2) {
+          c_name = ["player1", "circle"].join(" ");
+        } else if (this.state.currentPlayer === 1) {
+          c_name = ["player2", "circle"].join(" ");
+        }
+
+        document.getElementById("top" + c.toString()).className =
+          c_name.toString();
       }
     } else {
       alert("Game over. Please start a new game.");
     }
   }
-  hoverDisplay(board, c) {
-    //console.log(c);
-
-    for (let r = c4rows - 1; r >= 0; r--) {
+  hoverDisplay(board, c, curr) {
+    const top_name = "top" + c.toString();
+    let c_name;
+    if (curr === 1) {
+      c_name = ["player1", "circle"].join(" ");
+    } else if (curr === 2) {
+      c_name = ["player2", "circle"].join(" ");
+    }
+    document.getElementById(top_name).className = c_name.toString();
+    for (let r = c4rows; r >= 1; r--) {
       if (!board[r][c] || board[r][c] === 3) {
         const name = r.toString() + c.toString();
         document.getElementById(name).className = "tile2";
@@ -130,7 +141,11 @@ class Board extends Component {
   }
 
   hoverOut(c) {
-    for (let r = 0; r < c4rows; r++) {
+    const top_name = "top" + c.toString();
+    const c_name = ["open", "circle"].join(" ");
+
+    document.getElementById(top_name).className = c_name.toString();
+    for (let r = 1; r < c4rows + 1; r++) {
       const name = r.toString() + c.toString();
       const id = document.getElementById(name).className;
       if (id !== "currenttile") {
@@ -138,32 +153,9 @@ class Board extends Component {
       }
     }
   }
-  hoverTop(v, c) {
-    const name = "top" + c.toString();
-
-    let space;
-    if (v === 1) {
-      space = "player1";
-      const id_circle = [space, "circle"].join(" ");
-      document.getElementById(name).className = id_circle;
-    } else if (v === 2) {
-      space = "player2";
-      const id_circle = [space, "circle"].join(" ");
-      document.getElementById(name).className = id_circle;
-    }
-  }
-  hoverTopOut() {
-    let c;
-    
-    for (c = 0; c < c4columns; c++) {
-      const name = "top" + c.toString();
-      
-      document.getElementById(name).className = "open";
-    }
-  }
 
   checkVertical(board) {
-    for (let r = 3; r < c4rows; r++) {
+    for (let r = 4; r < c4rows + 1; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -179,7 +171,7 @@ class Board extends Component {
   }
 
   checkHorizontal(board) {
-    for (let r = 0; r < c4rows; r++) {
+    for (let r = 1; r < c4rows + 1; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -195,7 +187,7 @@ class Board extends Component {
   }
 
   checkDiagonalRight(board) {
-    for (let r = 3; r < c4rows; r++) {
+    for (let r = 4; r < c4rows + 1; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -211,7 +203,7 @@ class Board extends Component {
   }
 
   checkDiagonalLeft(board) {
-    for (let r = 3; r < c4rows; r++) {
+    for (let r = 4; r < c4rows + 1; r++) {
       for (let c = 3; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -227,7 +219,7 @@ class Board extends Component {
   }
 
   checkDraw(board) {
-    for (let r = 0; r < c4rows; r++) {
+    for (let r = 1; r < c4rows + 1; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c] === null) {
           return null;
@@ -252,8 +244,8 @@ class Board extends Component {
   }
 
   render() {
-    const { currentPlayer, board, top, traps } = this.state;
-    //let rowNumber =0;
+    const { currentPlayer, board, traps } = this.state;
+
     return (
       <div>
         <div
@@ -267,19 +259,6 @@ class Board extends Component {
         <table>
           <thead></thead>
           <tbody>
-            {top.map((row, i) => (
-              <Row
-                board={top}
-                key={i}
-                row={row}
-                play={this.play}
-                hover={this.hoverTop}
-                out={this.hoverTopOut}
-                rowNum={i}
-                traps={traps}
-                ifTop={true}
-              />
-            ))}
             {board.map((row, i) => (
               <Row
                 board={board}
@@ -290,7 +269,7 @@ class Board extends Component {
                 out={this.hoverOut}
                 rowNum={i}
                 traps={traps}
-                ifTop={false}
+                curr={currentPlayer}
               />
             ))}
           </tbody>
