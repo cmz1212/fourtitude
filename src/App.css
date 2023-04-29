@@ -1,18 +1,23 @@
+#root {
+  height: 100vh;
+}
+
 h1 {
   text-align: center;
-  color: blue;
+  color: #04284b;
+  font: bold 65px "Brush Script MT", cursive;
 }
 
 table {
   margin: 0 auto;
-  background: blue;
+  background: #04284b;
 }
 
 .button {
-  border: 1px solid blue;
-  color: blue;
-  height: 30px;
-  width: 100px;
+  border: 1px solid #04284b;
+  color: #04284b;
+  height: 38px;
+  width: 180px;
   border-radius: 50px;
   margin: 0 auto;
   margin-bottom: 25px;
@@ -23,18 +28,20 @@ table {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.5s, color 0.5s;
+  font: 26px "Brush Script MT", cursive;
 }
 
 .tile {
   height: 80px;
   width: 80px;
-  background-color: blue;
+  background-color: #0d5aa8;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
+
 .top {
   height: 80px;
   width: 80px;
@@ -45,20 +52,23 @@ table {
   align-items: center;
   cursor: pointer;
 }
-.tile2{
+
+
+.tile2 {
+
   height: 80px;
   width: 80px;
-  background-color: brown;
+  background-color: #73b8fd;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
-.currenttile{
+.currenttile {
   height: 80px;
   width: 80px;
-  background-color: green;
+  background-color: #0d5aa8;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -67,10 +77,10 @@ table {
 }
 
 .open {
-  background-color: #FFF;
+  background-color: #ffffff;
 }
 .trap {
-  background-color: black;
+  background-color: #04284b;
 }
 
 .circle {
@@ -80,18 +90,17 @@ table {
 }
 
 .player1 {
-  background-color: red;
+  background-color: #a80d50;
   transition: background-color 0.25s;
 }
 
 .player2 {
-  background-color: yellow;
+  background-color: #c5bc15;
   transition: background-color 0.25s;
 }
 
-.text{
+.text {
   display: flex;
-  
   justify-content: center;
-
+  font: bold 32px "Brush Script MT", cursive;
 }
