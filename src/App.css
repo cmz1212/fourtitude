@@ -35,6 +35,16 @@ table {
   align-items: center;
   cursor: pointer;
 }
+.top {
+  height: 80px;
+  width: 80px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 .tile2{
   height: 80px;
   width: 80px;
