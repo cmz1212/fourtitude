@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class Tile extends Component {
   render() {
-    const { play, columnIndex, rowIndex, hover, out, value, board, curr } =
+    const { play, columnIndex, rowIndex, hover, out, value, board, curr} =
       this.props;
     let space = "open";
 
@@ -19,16 +19,19 @@ class Tile extends Component {
 
     return (
       <td>
+        
         {rowIndex === 0 ? (
+          
           <div
             
             className="top"
-            onClick={() => play(columnIndex)}
+            onClick={() => play( columnIndex)}
             onMouseOver={() => hover(board, columnIndex, curr)}
             onMouseOut={() => out(columnIndex)}
           >
             <div id={`top${columnIndex}`} className={[space, "circle"].join(" ")}></div>
           </div>
+          
         ) : (
           <div
             id={`${rowIndex}${columnIndex}`}
