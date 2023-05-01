@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import Row from "./row.js";
 import "./../App.css";
+import Row from "./row.js";
+import audio_click from "./../sound/click.wav";
+import audio_drop from "./../sound/drop.wav";
+import audio_win from "./../sound/win.wav";
+import audio_draw from "./../sound/draw.wav";
 
 const c4rows = 6;
 const c4columns = 7;
@@ -104,6 +108,7 @@ class Board extends Component {
     if (!this.state.gameOver) {
       for (let r = c4rows - 1; r >= 0; r--) {
         if (!board[r][c]) {
+          new Audio(audio_drop).play();
           board[r][c] = this.state.currentPlayer;
           break;
         }
@@ -111,12 +116,15 @@ class Board extends Component {
 
       let result = this.checkAll(board);
       if (result === this.state.player1) {
+        new Audio(audio_win).play();
         this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
         alert("Red Wins!");
       } else if (result === this.state.player2) {
+        new Audio(audio_win).play();
         this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
         alert("Yellow wins!");
       } else if (result === "draw") {
+        new Audio(audio_draw).play();
         this.setState({ board, gameOver: true });
         alert("It's a draw!");
       } else {
@@ -138,7 +146,8 @@ class Board extends Component {
   }
 
   hoverDisplay(board, c, curr) {
-    const selector_name = "selector" + c.toString();
+    let audio = new Audio(audio_click);
+    audio.volume = 0.1;
 
     let c_name = "";
     if (curr === 1) {
@@ -147,14 +156,14 @@ class Board extends Component {
       c_name = ["player2", "circle"].join(" ");
     }
 
-    console.log(c_name);
-    console.log(selector_name);
-    document.getElementById(selector_name).className = c_name.toString();
+    document.getElementById("selector" + c.toString()).className =
+      c_name.toString();
 
     for (let r = c4rows - 1; r >= 0; r--) {
       if (!board[r][c] || board[r][c] === 3) {
-        const name = r.toString() + c.toString();
-        document.getElementById(name).className = "tile-hover";
+        audio.play();
+        document.getElementById(r.toString() + c.toString()).className =
+          "tile-hover";
         break;
       }
     }
