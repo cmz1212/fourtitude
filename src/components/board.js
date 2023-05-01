@@ -13,8 +13,8 @@ class Board extends Component {
       player1: 1,
       player2: 2,
       currentPlayer: null,
-     p1Win:0,
-     p2Win:0,
+      p1Win: 0,
+      p2Win: 0,
       board: [],
       gameOver: false,
       traps: [[], [], []],
@@ -26,7 +26,6 @@ class Board extends Component {
   initBoard() {
     let board = [];
     let traps = [];
-   
 
     for (let i = 0; i < 3; i++) {
       let x = Math.floor(Math.random() * 5 + 1);
@@ -47,7 +46,7 @@ class Board extends Component {
       let y = Math.floor(Math.random() * 5 + 1);
       traps[2].splice(0, 2, x, y);
     }
-   
+
     for (let r = 0; r < c4rows + 1; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
@@ -66,7 +65,7 @@ class Board extends Component {
 
     this.setState({
       board,
-      
+
       currentPlayer: this.state.player1,
       gameOver: false,
       traps,
@@ -80,7 +79,7 @@ class Board extends Component {
   }
 
   play(c) {
-    const{p1Win, p2Win} = this.state;
+    const { p1Win, p2Win } = this.state;
     if (!this.state.gameOver) {
       for (let r = 1; r < c4rows + 1; r++) {
         for (let c = 0; c < c4columns; c++) {
@@ -100,11 +99,11 @@ class Board extends Component {
 
       let result = this.checkAll(board);
       if (result === this.state.player1) {
-        this.setState({ board, gameOver: true, p1Win:p1Win+1, });
-        
+        this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
+
         alert("Player 1 wins!");
       } else if (result === this.state.player2) {
-        this.setState({ board, gameOver: true, p2Win:p2Win+1 });
+        this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
         alert("Player 2 wins!");
       } else if (result === "draw") {
         this.setState({ board, gameOver: true });
@@ -245,7 +244,61 @@ class Board extends Component {
   componentWillMount() {
     this.initBoard();
   }
+  applyNull(r, c) {
+    const board = this.state.board;
+    board[r][c] = null;
+  }
+  applyFire(r, c) {
+    const board = this.state.board;
+    for (let i = c - 1; i <= c + 1; i++) {
+      this.applyNull(r + 1, i);
+    }
 
+    this.applyNull(r, c + 1);
+    this.applyNull(r, c - 1);
+    this.setState({
+      board,
+    });
+  }
+  applyThunder(r, c) {
+    const board = this.state.board;
+    for (let i = c4rows; i > r; i--) {
+      this.applyNull(i, c);
+    }
+    this.setState({
+      board,
+    });
+  }
+  applyIce(r,c) {
+    const board = this.state.board;
+    board[r][c]=4;
+    this.setState({
+      board,
+    });
+  }
+  applyGrass() {
+    console.log("apply grass");
+  }
+  applyRandom(t1, t2, t3) {
+    console.log(t1, t2, t3);
+
+    const rand_num = Math.floor(Math.random() * 4);
+    switch (rand_num) {
+      case 0:
+        this.applyFire(t1[0], t1[1]);
+        break;
+      case 1:
+        this.applyThunder(t1[0], t1[1]);
+        break;
+      case 2:
+        this.applyIce();
+        break;
+      case 3:
+        this.applyGrass();
+        break;
+      default:
+    }
+  }
   render() {
     const { currentPlayer, board, traps, p1Win, p2Win } = this.state;
 
@@ -259,7 +312,9 @@ class Board extends Component {
         >
           New Game
         </div>
-        <p>P1 {p1Win} : P2 {p2Win}</p>
+        <p>
+          P1 {p1Win} : P2 {p2Win}
+        </p>
         <table>
           <thead></thead>
           <tbody>
@@ -280,6 +335,18 @@ class Board extends Component {
         </table>
         <br />
         <h3 className="text">Player {currentPlayer}'s turn</h3>
+        <h4>Test buttons</h4>
+        <div display="inline-block">
+          <button onClick={() => this.applyFire(5, 5)}>Apply Fire</button>
+          <button onClick={() => this.applyThunder(2, 5)}>Apply Thunder</button>
+          <button onClick={() => this.applyIce(5,5)}>Apply Ice</button>
+          <button onClick={() => this.applyGrass}>Apply Grass</button>
+          <button
+            onClick={() => this.applyRandom(traps[0], traps[1], traps[2])}
+          >
+            Apply random{" "}
+          </button>
+        </div>
       </div>
     );
   }

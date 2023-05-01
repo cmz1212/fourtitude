@@ -12,7 +12,10 @@ class Tile extends Component {
       space = "player2";
     } else if (value === 3) {
       space = "trap";
+    }else if (value === 4) {
+      space = "freeze";
     }
+
 
     return (
       <td>
