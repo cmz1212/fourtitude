@@ -13,8 +13,8 @@ class Board extends Component {
       player1: 1,
       player2: 2,
       currentPlayer: null,
-     p1Win:0,
-     p2Win:0,
+      p1Win: 0,
+      p2Win: 0,
       board: [],
       gameOver: false,
       traps: [[], [], []],
@@ -26,7 +26,6 @@ class Board extends Component {
   initBoard() {
     let board = [];
     let traps = [];
-   
 
     for (let i = 0; i < 3; i++) {
       let x = Math.floor(Math.random() * 5 + 1);
@@ -47,7 +46,7 @@ class Board extends Component {
       let y = Math.floor(Math.random() * 5 + 1);
       traps[2].splice(0, 2, x, y);
     }
-   
+
     for (let r = 0; r < c4rows + 1; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
@@ -66,7 +65,8 @@ class Board extends Component {
 
     this.setState({
       board,
-      
+      p1Win: 0,
+      p2Win: 0,
       currentPlayer: this.state.player1,
       gameOver: false,
       traps,
@@ -80,31 +80,23 @@ class Board extends Component {
   }
 
   play(c) {
-    const{p1Win, p2Win} = this.state;
+    const { p1Win, p2Win } = this.state;
+
+    let board = this.state.board;
     if (!this.state.gameOver) {
-      for (let r = 1; r < c4rows + 1; r++) {
-        for (let c = 0; c < c4columns; c++) {
-          const name = r.toString() + c.toString();
-          document.getElementById(name).className = "tile";
-        }
-      }
-      let board = this.state.board;
       for (let r = 6; r >= 1; r--) {
-        if (!board[r][c] || board[r][c] === 3) {
+        if (!board[r][c]) {
           board[r][c] = this.state.currentPlayer;
-          const name = r.toString() + c.toString();
-          document.getElementById(name).className = "currenttile";
           break;
         }
       }
 
       let result = this.checkAll(board);
       if (result === this.state.player1) {
-        this.setState({ board, gameOver: true, p1Win:p1Win+1, });
-        
+        this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
         alert("Player 1 wins!");
       } else if (result === this.state.player2) {
-        this.setState({ board, gameOver: true, p2Win:p2Win+1 });
+        this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
         alert("Player 2 wins!");
       } else if (result === "draw") {
         this.setState({ board, gameOver: true });
@@ -112,48 +104,49 @@ class Board extends Component {
       } else {
         this.setState({ board, currentPlayer: this.togglePlayer() });
         let c_name;
+
         if (this.state.currentPlayer === 2) {
           c_name = ["player1", "circle"].join(" ");
         } else if (this.state.currentPlayer === 1) {
           c_name = ["player2", "circle"].join(" ");
         }
 
-        document.getElementById("top" + c.toString()).className =
+        document.getElementById("selector" + c.toString()).className =
           c_name.toString();
       }
     } else {
       alert("Game over. Please start a new game.");
     }
   }
+
   hoverDisplay(board, c, curr) {
-    const top_name = "top" + c.toString();
-    let c_name;
+    const selector_name = "selector" + c.toString();
+
+    let c_name = "";
     if (curr === 1) {
       c_name = ["player1", "circle"].join(" ");
     } else if (curr === 2) {
       c_name = ["player2", "circle"].join(" ");
     }
-    document.getElementById(top_name).className = c_name.toString();
+    document.getElementById(selector_name).className = c_name.toString();
+
     for (let r = c4rows; r >= 1; r--) {
       if (!board[r][c] || board[r][c] === 3) {
         const name = r.toString() + c.toString();
-        document.getElementById(name).className = "tile2";
+        document.getElementById(name).className = "tile-hover";
         break;
       }
     }
   }
 
   hoverOut(c) {
-    const top_name = "top" + c.toString();
-    const c_name = ["open", "circle"].join(" ");
+    const selector_name = "selector" + c.toString();
+    const c_name = ["selector-open", "circle"].join(" ");
+    document.getElementById(selector_name).className = c_name.toString();
 
-    document.getElementById(top_name).className = c_name.toString();
     for (let r = 1; r < c4rows + 1; r++) {
       const name = r.toString() + c.toString();
-      const id = document.getElementById(name).className;
-      if (id !== "currenttile") {
-        document.getElementById(name).className = "tile";
-      }
+      document.getElementById(name).className = "tile";
     }
   }
 
@@ -247,19 +240,13 @@ class Board extends Component {
   }
 
   render() {
-    const { currentPlayer, board, traps, p1Win, p2Win } = this.state;
+    const { currentPlayer, board, traps } = this.state;
 
     return (
       <div>
-        <div
-          className="button"
-          onClick={() => {
-            this.initBoard();
-          }}
-        >
-          New Game
-        </div>
-        <p>P1 {p1Win} : P2 {p2Win}</p>
+        <p className="text">
+          {currentPlayer === 1 ? "Red" : "Yellow"}'s Turn: Drop Token Below
+        </p>
         <table>
           <thead></thead>
           <tbody>
@@ -278,8 +265,17 @@ class Board extends Component {
             ))}
           </tbody>
         </table>
+
         <br />
-        <h3 className="text">Player {currentPlayer}'s turn</h3>
+        <br />
+        <div
+          className="button"
+          onClick={() => {
+            this.initBoard();
+          }}
+        >
+          New Game
+        </div>
       </div>
     );
   }

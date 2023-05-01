@@ -4,7 +4,13 @@ class Tile extends Component {
   render() {
     const { play, columnIndex, rowIndex, hover, out, value, board, curr } =
       this.props;
-    let space = "open";
+
+    let space = "";
+    if (rowIndex === 0) {
+      space = "selector-open";
+    } else {
+      space = "open";
+    }
 
     if (value === 1) {
       space = "player1";
@@ -18,13 +24,15 @@ class Tile extends Component {
       <td>
         {rowIndex === 0 ? (
           <div
-            
-            className="top"
+            className="selector-tile"
             onClick={() => play(columnIndex)}
             onMouseOver={() => hover(board, columnIndex, curr)}
             onMouseOut={() => out(columnIndex)}
           >
-            <div id={`top${columnIndex}`} className={[space, "circle"].join(" ")}></div>
+            <div
+              id={`selector${columnIndex}`}
+              className={[space, "circle"].join(" ")}
+            ></div>
           </div>
         ) : (
           <div

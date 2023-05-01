@@ -5,7 +5,7 @@
 h1 {
   text-align: center;
   color: #04284b;
-  font: bold 65px "Brush Script MT", cursive;
+  font: bold 60px "Brush Script MT", cursive;
 }
 
 table {
@@ -42,20 +42,7 @@ table {
   cursor: pointer;
 }
 
-.top {
-  height: 83px;
-  width: 83px;
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-
-.tile2 {
-
+.selector-tile {
   height: 80px;
   width: 80px;
   background-color: #73b8fd;
@@ -65,10 +52,11 @@ table {
   align-items: center;
   cursor: pointer;
 }
-.currenttile {
+
+.tile-hover {
   height: 80px;
   width: 80px;
-  background-color: #0d5aa8;
+  background-color: #73b8fd;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -79,6 +67,11 @@ table {
 .open {
   background-color: #ffffff;
 }
+
+.selector-open {
+  background-color: #73b8fd;
+}
+
 .trap {
   background-color: #04284b;
 }
