@@ -2,11 +2,20 @@ import React, { Component } from "react";
 
 class Tile extends Component {
   render() {
-    const { play, columnIndex, rowIndex, hover, out, value, board, curr } =
-      this.props;
+    const {
+      selectorType,
+      board,
+      value,
+      columnIndex,
+      rowIndex,
+      play,
+      hover,
+      out,
+      curr,
+    } = this.props;
 
     let space = "";
-    if (rowIndex === 0) {
+    if (selectorType === true) {
       space = "selector-open";
     } else {
       space = "open";
@@ -20,9 +29,9 @@ class Tile extends Component {
       space = "trap";
     }
 
-    return (
-      <td>
-        {rowIndex === 0 ? (
+    if (selectorType === true) {
+      return (
+        <td>
           <div
             className="selector-tile"
             onClick={() => play(columnIndex)}
@@ -34,7 +43,11 @@ class Tile extends Component {
               className={[space, "circle"].join(" ")}
             ></div>
           </div>
-        ) : (
+        </td>
+      );
+    } else {
+      return (
+        <td>
           <div
             id={`${rowIndex}${columnIndex}`}
             className="tile"
@@ -44,9 +57,9 @@ class Tile extends Component {
           >
             <div className={[space, "circle"].join(" ")}></div>
           </div>
-        )}
-      </td>
-    );
+        </td>
+      );
+    }
   }
 }
 

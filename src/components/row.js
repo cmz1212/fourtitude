@@ -3,13 +3,14 @@ import Tile from "./tile.js";
 
 class Row extends Component {
   render() {
-    const { play, row, hover, out, rowNum, board, curr } = this.props;
+    const { selectorType, board, row, rowNum, play, hover, out, curr } =
+      this.props;
 
     let rowOutput = Object.keys(row).map(function (i) {
       return (
         <Tile
+          selectorType={selectorType}
           board={board}
-          key={i}
           value={row[i]}
           columnIndex={i}
           rowIndex={rowNum}

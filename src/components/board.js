@@ -15,39 +15,56 @@ class Board extends Component {
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
+      selector: [],
       board: [],
       gameOver: false,
       traps: [[], [], []],
     };
 
     this.play = this.play.bind(this);
+    this.hoverDisplay = this.hoverDisplay.bind(this);
+    this.hoverOut = this.hoverOut.bind(this);
   }
 
   initBoard() {
+    let selector = [];
     let board = [];
     let traps = [];
 
+    //Traps
     for (let i = 0; i < 3; i++) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
 
       traps.push([x, y]);
     }
+
     while (traps[1].toString() === traps[0].toString()) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
       traps[1].splice(0, 2, x, y);
     }
+
     while (
       traps[2].toString() === traps[0].toString() ||
       traps[2].toString() === traps[1].toString()
     ) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
       traps[2].splice(0, 2, x, y);
     }
 
-    for (let r = 0; r < c4rows + 1; r++) {
+    //Selector
+    for (let r = 0; r < 1; r++) {
+      let row = [];
+      for (let c = 0; c < c4columns; c++) {
+        row.push(null);
+      }
+      selector.push(row);
+    }
+
+    //Board
+    for (let r = 0; r < c4rows; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
         if (r === traps[0][0] && c === traps[0][1]) {
@@ -64,6 +81,7 @@ class Board extends Component {
     }
 
     this.setState({
+      selector,
       board,
       p1Win: 0,
       p2Win: 0,
@@ -84,7 +102,7 @@ class Board extends Component {
 
     let board = this.state.board;
     if (!this.state.gameOver) {
-      for (let r = 6; r >= 1; r--) {
+      for (let r = c4rows - 1; r >= 0; r--) {
         if (!board[r][c]) {
           board[r][c] = this.state.currentPlayer;
           break;
@@ -94,10 +112,10 @@ class Board extends Component {
       let result = this.checkAll(board);
       if (result === this.state.player1) {
         this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
-        alert("Player 1 wins!");
+        alert("Red Wins!");
       } else if (result === this.state.player2) {
         this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
-        alert("Player 2 wins!");
+        alert("Yellow wins!");
       } else if (result === "draw") {
         this.setState({ board, gameOver: true });
         alert("It's a draw!");
@@ -128,9 +146,12 @@ class Board extends Component {
     } else if (curr === 2) {
       c_name = ["player2", "circle"].join(" ");
     }
+
+    console.log(c_name);
+    console.log(selector_name);
     document.getElementById(selector_name).className = c_name.toString();
 
-    for (let r = c4rows; r >= 1; r--) {
+    for (let r = c4rows - 1; r >= 0; r--) {
       if (!board[r][c] || board[r][c] === 3) {
         const name = r.toString() + c.toString();
         document.getElementById(name).className = "tile-hover";
@@ -144,14 +165,14 @@ class Board extends Component {
     const c_name = ["selector-open", "circle"].join(" ");
     document.getElementById(selector_name).className = c_name.toString();
 
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 0; r < c4rows; r++) {
       const name = r.toString() + c.toString();
       document.getElementById(name).className = "tile";
     }
   }
 
   checkVertical(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -167,7 +188,7 @@ class Board extends Component {
   }
 
   checkHorizontal(board) {
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 0; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -183,7 +204,7 @@ class Board extends Component {
   }
 
   checkDiagonalRight(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -199,7 +220,7 @@ class Board extends Component {
   }
 
   checkDiagonalLeft(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 3; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -215,7 +236,7 @@ class Board extends Component {
   }
 
   checkDraw(board) {
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 1; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c] === null) {
           return null;
@@ -240,26 +261,51 @@ class Board extends Component {
   }
 
   render() {
-    const { currentPlayer, board, traps } = this.state;
+    const { gameOver, selector, currentPlayer, board } = this.state;
+
+    const gameWinnerMessage =
+      currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+
+    const gameTurnMessage = `${
+      currentPlayer === 1 ? "Red" : "Yellow"
+    }'s Turn: Drop Token Below`;
 
     return (
       <div>
-        <p className="text">
-          {currentPlayer === 1 ? "Red" : "Yellow"}'s Turn: Drop Token Below
-        </p>
-        <table>
+        <span className="text">
+          {gameOver ? gameWinnerMessage : gameTurnMessage}
+        </span>
+
+        <table id="selector-table">
           <thead></thead>
           <tbody>
-            {board.map((row, i) => (
+            {selector.map((row, i) => (
               <Row
+                selectorType={true}
                 board={board}
-                key={i}
                 row={row}
                 play={this.play}
                 hover={this.hoverDisplay}
                 out={this.hoverOut}
                 rowNum={i}
-                traps={traps}
+                curr={currentPlayer}
+              />
+            ))}
+          </tbody>
+        </table>
+
+        <table>
+          <thead></thead>
+          <tbody>
+            {board.map((row, i) => (
+              <Row
+                selectorType={false}
+                board={board}
+                row={row}
+                rowNum={i}
+                play={this.play}
+                hover={this.hoverDisplay}
+                out={this.hoverOut}
                 curr={currentPlayer}
               />
             ))}

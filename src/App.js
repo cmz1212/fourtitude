@@ -5,7 +5,7 @@ import Board from "./components/board.js";
 class App extends Component {
   render() {
     return (
-      <div id="root">
+      <div id="app-root">
         <h1>Fourtitude</h1>
         <Board />
       </div>
