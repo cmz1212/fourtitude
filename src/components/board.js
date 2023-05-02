@@ -121,7 +121,7 @@ class Board extends Component {
           if (board[r][c] === 3) {
             board[r][c] = this.state.currentPlayer;
 
-            this.applyFire(r, c);
+            this.applyRandom(r, c);
             let t1,
               t2,
               t3 = false;
