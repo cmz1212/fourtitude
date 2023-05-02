@@ -121,7 +121,7 @@ class Board extends Component {
           if (board[r][c] === 3) {
             board[r][c] = this.state.currentPlayer;
 
-            this.applyRandom(r, c);
+            this.applyFire(r, c);
             let t1,
               t2,
               t3 = false;
@@ -134,7 +134,7 @@ class Board extends Component {
             if (board[traps[2][0]][traps[2][1]] === 3) {
               t3 = true;
             }
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < (6-r); j++) {
               this.applyDrop();
               await this.delay(100);
             }
@@ -341,8 +341,10 @@ class Board extends Component {
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
     const { board, currentPlayer } = this.state;
     for (let i = c - 1; i <= c + 1; i++) {
+      if (board[r][i] !== 3) {
+        this.applyNull(r + 1, i);
+      }
       if (board[r + 1][i] !== 3) {
-        this.applyNull(r, i);
         this.applyNull(r + 1, i);
       }
     }
@@ -354,7 +356,9 @@ class Board extends Component {
 
   applyThunder = (r, c) => {
     new Audio(audio_thunder).play();
-    alert("Special effect triggered: Thunder!\nTiles in same column are removed!");
+    alert(
+      "Special effect triggered: Thunder!\nTiles in same column are removed!"
+    );
     const board = this.state.board;
     for (let i = c4rows - 1; i > r; i--) {
       this.applyNull(i, c);
@@ -392,7 +396,7 @@ class Board extends Component {
       const rand_num = Math.floor(Math.random() * 3);
       switch (rand_num) {
         case 0:
-          if (r > 1 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
+          if (r > 0 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
             board[r - 1][c] = currentPlayer;
             determinant = false;
           }
@@ -428,20 +432,20 @@ class Board extends Component {
     this.setState({ board });
   };
 
-  applyRandom(r,c) {
+  applyRandom(r, c) {
     const rand_num = Math.floor(Math.random() * 4);
     switch (rand_num) {
       case 0:
-        this.applyFire(r,c);
+        this.applyFire(r, c);
         break;
       case 1:
-        this.applyThunder(r,c);
+        this.applyThunder(r, c);
         break;
       case 2:
-        this.applyIce(r,c);
+        this.applyIce(r, c);
         break;
       case 3:
-        this.applyGrowth(r,c);
+        this.applyGrowth(r, c);
         break;
       default:
     }
@@ -508,7 +512,6 @@ class Board extends Component {
           }}
         >
           New Game
-          
         </div>
       </div>
     );
