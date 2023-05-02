@@ -82,6 +82,9 @@ table {
 .trap {
   background-color: #04284b;
 }
+.freeze {
+  background-color: #94c0ec;
+}
 
 .circle {
   border-radius: 100px;
