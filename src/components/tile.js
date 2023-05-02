@@ -2,9 +2,26 @@ import React, { Component } from "react";
 
 class Tile extends Component {
   render() {
-    const { play, columnIndex, rowIndex, hover, out, value, board, curr} =
-      this.props;
-    let space = "open";
+
+    const {
+      selectorType,
+      board,
+      value,
+      columnIndex,
+      rowIndex,
+      play,
+      hover,
+      out,
+      curr,
+    } = this.props;
+
+    let space = "";
+    if (selectorType === true) {
+      space = "selector-open";
+    } else {
+      space = "open";
+    }
+
 
     if (value === 1) {
       space = "player1";
@@ -17,22 +34,31 @@ class Tile extends Component {
     }
 
 
-    return (
-      <td>
-        
-        {rowIndex === 0 ? (
-          
+    if (selectorType === true) {
+      return (
+        <td>
           <div
-            
-            className="top"
-            onClick={() => play( columnIndex)}
+            className="selector-tile"
+            onClick={() => play(columnIndex)}
+
+
+   
+
             onMouseOver={() => hover(board, columnIndex, curr)}
             onMouseOut={() => out(columnIndex)}
           >
-            <div id={`top${columnIndex}`} className={[space, "circle"].join(" ")}></div>
+            <div
+              id={`selector${columnIndex}`}
+              className={[space, "circle"].join(" ")}
+            ></div>
           </div>
-          
-        ) : (
+
+        </td>
+      );
+    } else {
+      return (
+        <td>
+
           <div
             id={`${rowIndex}${columnIndex}`}
             className="tile"
@@ -42,9 +68,9 @@ class Tile extends Component {
           >
             <div className={[space, "circle"].join(" ")}></div>
           </div>
-        )}
-      </td>
-    );
+        </td>
+      );
+    }
   }
 }
 

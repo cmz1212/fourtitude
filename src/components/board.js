@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import Row from "./row.js";
 import "./../App.css";
+import Row from "./row.js";
+import audio_click from "./../sound/click.wav";
+import audio_drop from "./../sound/drop.wav";
+import audio_win from "./../sound/win.wav";
+import audio_draw from "./../sound/draw.wav";
 
 const c4rows = 6;
 const c4columns = 7;
@@ -15,39 +19,60 @@ class Board extends Component {
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
+
+      selector: [],
+
       board: [],
       gameOver: false,
       traps: [[], [], []],
     };
 
     this.play = this.play.bind(this);
+    this.hoverDisplay = this.hoverDisplay.bind(this);
+    this.hoverOut = this.hoverOut.bind(this);
   }
 
   initBoard() {
+    let selector = [];
     let board = [];
     let traps = [];
 
+    //Traps
     for (let i = 0; i < 3; i++) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
 
       traps.push([x, y]);
     }
+
     while (traps[1].toString() === traps[0].toString()) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
       traps[1].splice(0, 2, x, y);
     }
+
     while (
       traps[2].toString() === traps[0].toString() ||
       traps[2].toString() === traps[1].toString()
     ) {
-      let x = Math.floor(Math.random() * 5 + 1);
-      let y = Math.floor(Math.random() * 5 + 1);
+      let x = Math.floor(Math.random() * (c4rows - 1));
+      let y = Math.floor(Math.random() * (c4columns - 1));
       traps[2].splice(0, 2, x, y);
     }
 
-    for (let r = 0; r < c4rows + 1; r++) {
+
+    //Selector
+    for (let r = 0; r < 1; r++) {
+      let row = [];
+      for (let c = 0; c < c4columns; c++) {
+        row.push(null);
+      }
+      selector.push(row);
+    }
+
+    //Board
+    for (let r = 0; r < c4rows; r++) {
+
       let row = [];
       for (let c = 0; c < c4columns; c++) {
         if (r === traps[0][0] && c === traps[0][1]) {
@@ -64,7 +89,11 @@ class Board extends Component {
     }
 
     this.setState({
+      selector,
       board,
+
+      p1Win: 0,
+      p2Win: 0,
 
       currentPlayer: this.state.player1,
       gameOver: false,
@@ -77,6 +106,12 @@ class Board extends Component {
       ? this.state.player2
       : this.state.player1;
   }
+
+
+ 
+   
+
+
 
   play = async (col) => {
     const { p1Win, p2Win, traps } = this.state;
@@ -92,6 +127,7 @@ class Board extends Component {
       let board = this.state.board;
       for (let r = 6; r >= 1; r--) {
         if (!board[r][c] || board[r][c] === 3) {
+        new Audio(audio_drop).play();
           if (board[r][c] === 3) {
             board[r][c] = this.state.currentPlayer;
 
@@ -129,71 +165,85 @@ class Board extends Component {
 
           const name = r.toString() + c.toString();
           document.getElementById(name).className = "currenttile";
+
           break;
         }
       }
 
       let result = this.checkAll(board);
       if (result === this.state.player1) {
-        this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
 
-        alert("Player 1 wins!");
+        new Audio(audio_win).play();
+        this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
+        alert("Red Wins!");
       } else if (result === this.state.player2) {
+        new Audio(audio_win).play();
         this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
-        alert("Player 2 wins!");
+        alert("Yellow wins!");
+
       } else if (result === "draw") {
+        new Audio(audio_draw).play();
         this.setState({ board, gameOver: true });
         alert("It's a draw!");
       } else {
         this.setState({ board, currentPlayer: this.togglePlayer() });
         let c_name;
+
         if (this.state.currentPlayer === 2) {
           c_name = ["player1", "circle"].join(" ");
         } else if (this.state.currentPlayer === 1) {
           c_name = ["player2", "circle"].join(" ");
         }
 
-        document.getElementById("top" + c.toString()).className =
+        document.getElementById("selector" + c.toString()).className =
           c_name.toString();
       }
     } else {
       alert("Game over. Please start a new game.");
     }
-  };
+
+  }
+
+
   hoverDisplay(board, c, curr) {
-    const top_name = "top" + c.toString();
-    let c_name;
+    let audio = new Audio(audio_click);
+    audio.volume = 0.1;
+
+    let c_name = "";
     if (curr === 1) {
       c_name = ["player1", "circle"].join(" ");
     } else if (curr === 2) {
       c_name = ["player2", "circle"].join(" ");
     }
-    document.getElementById(top_name).className = c_name.toString();
-    for (let r = c4rows; r >= 1; r--) {
-      if (!board[r][c] || board[r][c] === 3 || board[r][c] === 4) {
-        const name = r.toString() + c.toString();
-        document.getElementById(name).className = "tile2";
+
+
+    document.getElementById("selector" + c.toString()).className =
+      c_name.toString();
+
+    for (let r = c4rows - 1; r >= 0; r--) {
+      if (!board[r][c] || board[r][c] === 3) {
+        audio.play();
+        document.getElementById(r.toString() + c.toString()).className =
+          "tile-hover";
+
         break;
       }
     }
   }
 
   hoverOut(c) {
-    const top_name = "top" + c.toString();
-    const c_name = ["open", "circle"].join(" ");
+    const selector_name = "selector" + c.toString();
+    const c_name = ["selector-open", "circle"].join(" ");
+    document.getElementById(selector_name).className = c_name.toString();
 
-    document.getElementById(top_name).className = c_name.toString();
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 0; r < c4rows; r++) {
       const name = r.toString() + c.toString();
-      const id = document.getElementById(name).className;
-      if (id !== "currenttile") {
-        document.getElementById(name).className = "tile";
-      }
+      document.getElementById(name).className = "tile";
     }
   }
 
   checkVertical(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -209,7 +259,7 @@ class Board extends Component {
   }
 
   checkHorizontal(board) {
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 0; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -225,7 +275,7 @@ class Board extends Component {
   }
 
   checkDiagonalRight(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
         if (board[r][c]) {
           if (
@@ -241,7 +291,7 @@ class Board extends Component {
   }
 
   checkDiagonalLeft(board) {
-    for (let r = 4; r < c4rows + 1; r++) {
+    for (let r = 3; r < c4rows; r++) {
       for (let c = 3; c < c4columns; c++) {
         if (board[r][c]) {
           if (
@@ -257,7 +307,7 @@ class Board extends Component {
   }
 
   checkDraw(board) {
-    for (let r = 1; r < c4rows + 1; r++) {
+    for (let r = 1; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c] === null) {
           return null;
@@ -410,10 +460,62 @@ class Board extends Component {
     }
   }
   render() {
-    const { currentPlayer, board, traps, p1Win, p2Win } = this.state;
+    const { gameOver, selector, currentPlayer, board } = this.state;
+
+    const gameWinnerMessage =
+      currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+
+    const gameTurnMessage = `${
+      currentPlayer === 1 ? "Red" : "Yellow"
+    }'s Turn: Drop Token Below`;
 
     return (
       <div>
+
+        <span className="text">
+          {gameOver ? gameWinnerMessage : gameTurnMessage}
+        </span>
+
+        <table id="selector-table">
+          <thead></thead>
+          <tbody>
+            {selector.map((row, i) => (
+              <Row
+                selectorType={true}
+                board={board}
+                row={row}
+                play={this.play}
+                hover={this.hoverDisplay}
+                out={this.hoverOut}
+                rowNum={i}
+                curr={currentPlayer}
+              />
+            ))}
+          </tbody>
+        </table>
+
+
+        <table>
+          <thead></thead>
+          <tbody>
+            {board.map((row, i) => (
+              <Row
+                selectorType={false}
+                board={board}
+                row={row}
+                rowNum={i}
+                play={this.play}
+                hover={this.hoverDisplay}
+                out={this.hoverOut}
+                curr={currentPlayer}
+              />
+            ))}
+          </tbody>
+        </table>
+
+        <br />
+        <br />
+
         <div
           className="button"
           onClick={() => {
@@ -421,36 +523,15 @@ class Board extends Component {
           }}
         >
           New Game
-        </div>
-        <p>
-          P1 {p1Win} : P2 {p2Win}
-        </p>
-        <table>
-          <thead></thead>
-          <tbody>
-            {board.map((row, i) => (
-              <Row
-                board={board}
-                key={i}
-                row={row}
-                play={this.play}
-                hover={this.hoverDisplay}
-                out={this.hoverOut}
-                rowNum={i}
-                traps={traps}
-                curr={currentPlayer}
-              />
-            ))}
-          </tbody>
-        </table>
-        <br />
-        <h3 className="text">Player {currentPlayer}'s turn</h3>
+
+        
         <h4>Test buttons</h4>
         <div display="inline-block">
           
           <button onClick={() => this.applyRandom(traps[0])}>
             Apply random{" "}
           </button>
+
         </div>
       </div>
     );
