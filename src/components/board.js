@@ -5,6 +5,10 @@ import audio_click from "./../sound/click.wav";
 import audio_drop from "./../sound/drop.wav";
 import audio_win from "./../sound/win.wav";
 import audio_draw from "./../sound/draw.wav";
+import audio_fire from "./../sound/fire_burning.wav";
+import audio_thunder from "./../sound/thunder_cracking.wav";
+import audio_ice from "./../sound/ice_effect.mp3";
+import audio_grass from "./../sound/grass_rustling.mp3";
 
 const c4rows = 6;
 const c4columns = 7;
@@ -333,6 +337,7 @@ class Board extends Component {
     });
   };
   applyFire = (r, c) => {
+    new Audio(audio_fire).play();
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
     const { board, currentPlayer } = this.state;
     for (let i = c - 1; i <= c + 1; i++) {
@@ -348,6 +353,7 @@ class Board extends Component {
   };
 
   applyThunder = (r, c) => {
+    new Audio(audio_thunder).play();
     alert("Special effect triggered: Thunder!\nTiles in same column are removed!");
     const board = this.state.board;
     for (let i = c4rows - 1; i > r; i--) {
@@ -359,6 +365,7 @@ class Board extends Component {
   };
 
   applyIce = (r, c) => {
+    new Audio(audio_ice).play();
     alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
     const board = this.state.board;
     if (r >= 1) {
@@ -376,6 +383,7 @@ class Board extends Component {
   };
 
   applyGrowth = (r, c) => {
+    new Audio(audio_grass).play();
     alert("Special effect triggered: Growth!\nYou gain a new tile!");
     const { board, currentPlayer } = this.state;
     let determinant = true;
