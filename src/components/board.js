@@ -433,7 +433,7 @@ class Board extends Component {
         this.applyIce(r,c);
         break;
       case 3:
-        this.applyGrass(r,c);
+        this.applyGrowth(r,c);
         break;
       default:
     }
