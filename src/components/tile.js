@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 class Tile extends Component {
   render() {
+
     const {
       selectorType,
       board,
@@ -21,13 +22,17 @@ class Tile extends Component {
       space = "open";
     }
 
+
     if (value === 1) {
       space = "player1";
     } else if (value === 2) {
       space = "player2";
     } else if (value === 3) {
       space = "trap";
+    }else if (value === 4) {
+      space = "freeze";
     }
+
 
     if (selectorType === true) {
       return (
@@ -35,6 +40,10 @@ class Tile extends Component {
           <div
             className="selector-tile"
             onClick={() => play(columnIndex)}
+
+
+   
+
             onMouseOver={() => hover(board, columnIndex, curr)}
             onMouseOut={() => out(columnIndex)}
           >
@@ -43,11 +52,13 @@ class Tile extends Component {
               className={[space, "circle"].join(" ")}
             ></div>
           </div>
+
         </td>
       );
     } else {
       return (
         <td>
+
           <div
             id={`${rowIndex}${columnIndex}`}
             className="tile"
