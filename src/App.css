@@ -107,3 +107,31 @@ table {
   justify-content: center;
   font: bold 26px "Brush Script MT", cursive;
 }
+
+#popup-button {
+  position: absolute;
+  top: 15%;
+  left: 120px;
+  color: #04284b;
+  font: bold 20px "Brush Script MT", cursive;
+  width: 300px;
+  height: 35px;
+}
+
+.popup {
+  position: absolute;
+  top: 22%;
+  left: 120px;
+  background-color: transparent;
+  font: 16px "Brush Script MT", cursive;
+}
+
+#Red-Stats {
+  color: #a80d50;
+  font: bold 20px "Brush Script MT", cursive;
+}
+
+#Yellow-Stats {
+  color: #c5bc15;
+  font: bold 20px "Brush Script MT", cursive;
+}
