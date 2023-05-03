@@ -11,6 +11,7 @@ import audio_click from "./../sound/click.wav";
 import audio_drop from "./../sound/drop.wav";
 import audio_win from "./../sound/win.wav";
 import audio_draw from "./../sound/draw.wav";
+import backgroundMusic from "./../sound/music.mp3";
 
 const c4rows = 6;
 const c4columns = 7;
@@ -25,21 +26,31 @@ class Board extends Component {
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
-
       selector: [],
-
       board: [],
       gameOver: false,
       traps: [[], [], []],
-
       showPopup: false,
+      isMusicPlaying: true,
     };
-
+    this.audioRef = React.createRef();
     this.play = this.play.bind(this);
     this.hoverDisplay = this.hoverDisplay.bind(this);
     this.hoverOut = this.hoverOut.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
   }
+
+  handleMusicToggle = () => {
+    const audio = this.audioRef.current;
+    if (this.state.isMusicPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    this.setState((prevState) => ({
+      isMusicPlaying: !prevState.isMusicPlaying,
+    }));
+  };
 
   togglePopup() {
     this.setState({
@@ -104,10 +115,6 @@ class Board extends Component {
     this.setState({
       selector,
       board,
-
-      p1Win: 0,
-      p2Win: 0,
-
       currentPlayer: this.state.player1,
       gameOver: false,
       traps,
@@ -322,12 +329,28 @@ class Board extends Component {
   componentWillMount() {
     this.initBoard();
   }
+
+  componentDidMount() {
+    const audio = this.audioRef.current;
+    audio.volume = 0.2;
+    audio.play();
+  }
+
+  componentDidUpdate() {
+    if (this.state.isMusicPlaying) {
+      this.audioRef.current.play();
+    } else {
+      this.audioRef.current.pause();
+    }
+  }
+
   applyNull(r, c) {
     const board = this.state.board;
     if (0 <= r <= c4rows && 0 <= c <= c4columns) {
       board[r][c] = null;
     }
   }
+
   delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   applyDrop = () => {
     const board = this.state.board;
@@ -524,18 +547,24 @@ class Board extends Component {
             ))}
           </tbody>
         </table>
-
         <br />
         <br />
+        <div className="button-row">
+          <div
+            className="button"
+            onClick={() => {
+              this.initBoard();
+            }}
+          >
+            New Game
+          </div>
 
-        <div
-          className="button"
-          onClick={() => {
-            this.initBoard();
-          }}
-        >
-          New Game
+          <div className="button" onClick={this.handleMusicToggle}>
+            {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
+          </div>
         </div>
+
+        <audio ref={this.audioRef} src={backgroundMusic} loop />
       </div>
     );
   }

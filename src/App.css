@@ -7,7 +7,7 @@ h1 {
   text-align: center;
   color: #04284b;
   margin: 0.72em;
-  font: bold 56px "Brush Script MT", cursive;
+  font: bold 65px "Squada One", cursive;
 }
 
 table {
@@ -20,14 +20,21 @@ table {
   background: transparent;
 }
 
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .button {
   border: 1px solid #04284b;
   color: #04284b;
-  height: 38px;
-  width: 180px;
+  height: 33px;
+  width: 160px;
   border-radius: 50px;
   margin: 0 auto;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   text-align: center;
   display: flex;
   flex-direction: row;
@@ -35,7 +42,16 @@ table {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.5s, color 0.5s;
-  font: 26px "Brush Script MT", cursive;
+  font: 26px "Squada One", cursive;
+  padding: 1px;
+}
+
+.button:first-child {
+  margin-right: 18px;
+}
+
+.button:last-child {
+  margin-left: 18px;
 }
 
 .tile {
@@ -105,7 +121,7 @@ table {
 .text {
   display: flex;
   justify-content: center;
-  font: bold 26px "Brush Script MT", cursive;
+  font: 35px "Squada One", cursive;
 }
 
 #popup-button {
@@ -113,7 +129,7 @@ table {
   top: 15%;
   left: 120px;
   color: #04284b;
-  font: bold 20px "Brush Script MT", cursive;
+  font: 24px "Squada One", cursive;
   width: 300px;
   height: 35px;
 }
@@ -123,15 +139,15 @@ table {
   top: 22%;
   left: 120px;
   background-color: transparent;
-  font: 16px "Brush Script MT", cursive;
+  font: 24px "Squada One", cursive;
 }
 
 #Red-Stats {
   color: #a80d50;
-  font: bold 20px "Brush Script MT", cursive;
+  font: 30px "Squada One", cursive;
 }
 
 #Yellow-Stats {
   color: #c5bc15;
-  font: bold 20px "Brush Script MT", cursive;
+  font: 30px "Squada One", cursive;
 }
