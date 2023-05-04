@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Board from "./components/board.js";
+import qm from "./img/question.png";
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class App extends Component {
     } else {
       this.hideHelp();
     }
-  
   }
 
   displayHelp() {
@@ -58,10 +58,16 @@ class App extends Component {
             <h2 id="heading">Help</h2>
             <div className="help-body" id="helpBody">
               <p id="description">
-                When a tile is dropped onto these special spaces, the following
-                special effects may be triggered: {<br />}Fire: {<br />}Thunder:{" "}
-                {<br />}Ice: {<br />}Growth:{<br />}Click on ? again to hide
-                this panel.
+                When a tile is dropped onto{" "}
+                <img src={qm} alt="question mark" width="25px" height="25px" />{" "}
+                spaces, the following special effects may be triggered: {<br />}
+                Fire: Tiles right next to the played tile and immediately below
+                are removed!{<br />}Thunder: All tiles in the same column and
+                below the played tile are removed!{<br />}Ice: Icy blockers
+                added to empty spaces above and beside the plyed tile!{<br />}
+                Growth: Spawn a random tile in one of the empty spaces adjacent
+                to played tile!
+                {<br />}Click on ? again to hide this panel.
               </p>
             </div>
           </div>

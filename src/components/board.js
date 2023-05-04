@@ -19,7 +19,6 @@ import audio_thunder from "./../sound/thunder_cracking.wav";
 import audio_ice from "./../sound/ice_effect.mp3";
 import audio_grass from "./../sound/grass_rustling.mp3";
 
-
 const c4rows = 6;
 const c4columns = 7;
 
@@ -159,7 +158,7 @@ class Board extends Component {
             if (board[traps[2][0]][traps[2][1]] === 3) {
               t3 = true;
             }
-            for (let j = 0; j < (6-r); j++) {
+            for (let j = 0; j < 6 - r; j++) {
               this.applyDrop();
               await this.delay(100);
             }
@@ -195,21 +194,16 @@ class Board extends Component {
             this.setState({ board, currentPlayer: this.togglePlayer() });
             let c_name;
 
-
             if (this.state.currentPlayer === 2) {
               c_name = ["player1", "circle"].join(" ");
             } else if (this.state.currentPlayer === 1) {
               c_name = ["player2", "circle"].join(" ");
             }
 
-
-
-
             document.getElementById("selector" + c.toString()).className =
               c_name.toString();
           }
           break;
-
         }
       }
     } else {
@@ -383,7 +377,6 @@ class Board extends Component {
   };
 
   applyFire = (r, c) => {
-
     new Audio(audio_fire).play();
 
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
@@ -403,7 +396,6 @@ class Board extends Component {
   };
 
   applyThunder = (r, c) => {
-
     new Audio(audio_thunder).play();
 
     alert(
@@ -419,7 +411,6 @@ class Board extends Component {
   };
 
   applyIce = (r, c) => {
-
     new Audio(audio_ice).play();
 
     alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
@@ -439,7 +430,6 @@ class Board extends Component {
   };
 
   applyGrowth = (r, c) => {
-
     new Audio(audio_grass).play();
 
     alert("Special effect triggered: Growth!\nYou gain a new tile!");
@@ -450,9 +440,7 @@ class Board extends Component {
       const rand_num = Math.floor(Math.random() * 3);
       switch (rand_num) {
         case 0:
-
           if (r > 0 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
-
             board[r - 1][c] = currentPlayer;
             determinant = false;
           }
@@ -528,7 +516,10 @@ class Board extends Component {
           {gameOver ? gameWinnerMessage : gameTurnMessage}
         </span>
 
-        <PopupIcon onClick={this.togglePopup} />
+        <PopupIcon
+          onClick={this.togglePopup}
+          
+        />
         {this.state.showPopup && (
           <Popup
             onClose={this.togglePopup}
@@ -591,7 +582,6 @@ class Board extends Component {
           <div className="button" onClick={this.handleMusicToggle}>
             {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
           </div>
-
         </div>
 
         <audio ref={this.audioRef} src={backgroundMusic} loop />
