@@ -1,14 +1,24 @@
 import React, { Component } from "react";
 import "./../App.css";
 import Row from "./row.js";
+import check3_Vertical from "./check3/check3_Vertical.js";
+import check3_Horizontal from "./check3/check3_Horizontal.js";
+import check3_DiagonalLeft from "./check3/check3_DiagonalLeft.js";
+import check3_DiagonalRight from "./check3/check3_DiagonalRight.js";
+import Popup from "./status/Popup.js";
+import PopupIcon from "./status/PopupIcon.js";
 import audio_click from "./../sound/click.wav";
 import audio_drop from "./../sound/drop.wav";
 import audio_win from "./../sound/win.wav";
 import audio_draw from "./../sound/draw.wav";
+
+import backgroundMusic from "./../sound/music.mp3";
+
 import audio_fire from "./../sound/fire_burning.wav";
 import audio_thunder from "./../sound/thunder_cracking.wav";
 import audio_ice from "./../sound/ice_effect.mp3";
 import audio_grass from "./../sound/grass_rustling.mp3";
+
 
 const c4rows = 6;
 const c4columns = 7;
@@ -23,17 +33,36 @@ class Board extends Component {
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
-
       selector: [],
-
       board: [],
       gameOver: false,
       traps: [[], [], []],
+      showPopup: false,
+      isMusicPlaying: true,
     };
-
+    this.audioRef = React.createRef();
     this.play = this.play.bind(this);
     this.hoverDisplay = this.hoverDisplay.bind(this);
     this.hoverOut = this.hoverOut.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
+  }
+
+  handleMusicToggle = () => {
+    const audio = this.audioRef.current;
+    if (this.state.isMusicPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    this.setState((prevState) => ({
+      isMusicPlaying: !prevState.isMusicPlaying,
+    }));
+  };
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup,
+    });
   }
 
   initBoard() {
@@ -93,10 +122,6 @@ class Board extends Component {
     this.setState({
       selector,
       board,
-
-      p1Win: 0,
-      p2Win: 0,
-
       currentPlayer: this.state.player1,
       gameOver: false,
       traps,
@@ -170,17 +195,21 @@ class Board extends Component {
             this.setState({ board, currentPlayer: this.togglePlayer() });
             let c_name;
 
+
             if (this.state.currentPlayer === 2) {
               c_name = ["player1", "circle"].join(" ");
             } else if (this.state.currentPlayer === 1) {
               c_name = ["player2", "circle"].join(" ");
             }
 
+
+
+
             document.getElementById("selector" + c.toString()).className =
               c_name.toString();
           }
           break;
-        } else {
+
         }
       }
     } else {
@@ -312,12 +341,28 @@ class Board extends Component {
   componentWillMount() {
     this.initBoard();
   }
+
+  componentDidMount() {
+    const audio = this.audioRef.current;
+    audio.volume = 0.2;
+    audio.play();
+  }
+
+  componentDidUpdate() {
+    if (this.state.isMusicPlaying) {
+      this.audioRef.current.play();
+    } else {
+      this.audioRef.current.pause();
+    }
+  }
+
   applyNull(r, c) {
     const board = this.state.board;
     if (0 <= r <= c4rows && 0 <= c <= c4columns) {
       board[r][c] = null;
     }
   }
+
   delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   applyDrop = () => {
     const board = this.state.board;
@@ -336,8 +381,11 @@ class Board extends Component {
       board,
     });
   };
+
   applyFire = (r, c) => {
+
     new Audio(audio_fire).play();
+
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
     const { board, currentPlayer } = this.state;
     for (let i = c - 1; i <= c + 1; i++) {
@@ -355,7 +403,9 @@ class Board extends Component {
   };
 
   applyThunder = (r, c) => {
+
     new Audio(audio_thunder).play();
+
     alert(
       "Special effect triggered: Thunder!\nTiles in same column are removed!"
     );
@@ -369,7 +419,9 @@ class Board extends Component {
   };
 
   applyIce = (r, c) => {
+
     new Audio(audio_ice).play();
+
     alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
     const board = this.state.board;
     if (r >= 1) {
@@ -387,7 +439,9 @@ class Board extends Component {
   };
 
   applyGrowth = (r, c) => {
+
     new Audio(audio_grass).play();
+
     alert("Special effect triggered: Growth!\nYou gain a new tile!");
     const { board, currentPlayer } = this.state;
     let determinant = true;
@@ -396,7 +450,9 @@ class Board extends Component {
       const rand_num = Math.floor(Math.random() * 3);
       switch (rand_num) {
         case 0:
+
           if (r > 0 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
+
             board[r - 1][c] = currentPlayer;
             determinant = false;
           }
@@ -451,7 +507,8 @@ class Board extends Component {
     }
   }
   render() {
-    const { gameOver, selector, currentPlayer, board } = this.state;
+    const { gameOver, selector, currentPlayer, board, p1Win, p2Win } =
+      this.state;
 
     const gameWinnerMessage =
       currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
@@ -460,11 +517,28 @@ class Board extends Component {
       currentPlayer === 1 ? "Red" : "Yellow"
     }'s Turn: Drop Token Below`;
 
+    const check3_Diagonals = check3_DiagonalLeft(board, c4rows, c4columns).map(
+      (elem, index) =>
+        elem + check3_DiagonalRight(board, c4rows, c4columns)[index]
+    );
+
     return (
       <div>
         <span className="text">
           {gameOver ? gameWinnerMessage : gameTurnMessage}
         </span>
+
+        <PopupIcon onClick={this.togglePopup} />
+        {this.state.showPopup && (
+          <Popup
+            onClose={this.togglePopup}
+            Player1Wins={p1Win}
+            Player2Wins={p2Win}
+            OpensVertical={check3_Vertical(board, c4rows, c4columns)}
+            OpensHorizontal={check3_Horizontal(board, c4rows, c4columns)}
+            OpensDiagonals={check3_Diagonals}
+          />
+        )}
 
         <table id="selector-table">
           <thead></thead>
@@ -501,18 +575,26 @@ class Board extends Component {
             ))}
           </tbody>
         </table>
-
         <br />
         <br />
 
-        <div
-          className="button"
-          onClick={() => {
-            this.initBoard();
-          }}
-        >
-          New Game
+        <div className="button-row">
+          <div
+            className="button"
+            onClick={() => {
+              this.initBoard();
+            }}
+          >
+            New Game
+          </div>
+
+          <div className="button" onClick={this.handleMusicToggle}>
+            {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
+          </div>
+
         </div>
+
+        <audio ref={this.audioRef} src={backgroundMusic} loop />
       </div>
     );
   }
