@@ -289,7 +289,7 @@ class Board extends Component {
   }
 
   checkDraw(board) {
-    for (let r = 1; r < c4rows; r++) {
+    for (let r = 0; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
         if (board[r][c] === null) {
           return null;
