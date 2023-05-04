@@ -96,7 +96,10 @@ table {
 }
 
 .trap {
-  background-color: #04284b;
+  
+  background-image: url("./img/question.png");
+  background-size: contain
+  
 }
 .freeze {
   background-color: #94c0ec;

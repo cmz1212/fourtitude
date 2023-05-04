@@ -11,7 +11,14 @@ import audio_click from "./../sound/click.wav";
 import audio_drop from "./../sound/drop.wav";
 import audio_win from "./../sound/win.wav";
 import audio_draw from "./../sound/draw.wav";
+
 import backgroundMusic from "./../sound/music.mp3";
+
+import audio_fire from "./../sound/fire_burning.wav";
+import audio_thunder from "./../sound/thunder_cracking.wav";
+import audio_ice from "./../sound/ice_effect.mp3";
+import audio_grass from "./../sound/grass_rustling.mp3";
+
 
 const c4rows = 6;
 const c4columns = 7;
@@ -152,7 +159,7 @@ class Board extends Component {
             if (board[traps[2][0]][traps[2][1]] === 3) {
               t3 = true;
             }
-            for (let j = 0; j < 5; j++) {
+            for (let j = 0; j < (6-r); j++) {
               this.applyDrop();
               await this.delay(100);
             }
@@ -188,16 +195,21 @@ class Board extends Component {
             this.setState({ board, currentPlayer: this.togglePlayer() });
             let c_name;
 
+
             if (this.state.currentPlayer === 2) {
               c_name = ["player1", "circle"].join(" ");
             } else if (this.state.currentPlayer === 1) {
               c_name = ["player2", "circle"].join(" ");
             }
 
+
+
+
             document.getElementById("selector" + c.toString()).className =
               c_name.toString();
           }
           break;
+
         }
       }
     } else {
@@ -371,11 +383,16 @@ class Board extends Component {
   };
 
   applyFire = (r, c) => {
+
+    new Audio(audio_fire).play();
+
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
     const { board, currentPlayer } = this.state;
     for (let i = c - 1; i <= c + 1; i++) {
+      if (board[r][i] !== 3) {
+        this.applyNull(r + 1, i);
+      }
       if (board[r + 1][i] !== 3) {
-        this.applyNull(r, i);
         this.applyNull(r + 1, i);
       }
     }
@@ -386,6 +403,9 @@ class Board extends Component {
   };
 
   applyThunder = (r, c) => {
+
+    new Audio(audio_thunder).play();
+
     alert(
       "Special effect triggered: Thunder!\nTiles in same column are removed!"
     );
@@ -399,6 +419,9 @@ class Board extends Component {
   };
 
   applyIce = (r, c) => {
+
+    new Audio(audio_ice).play();
+
     alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
     const board = this.state.board;
     if (r >= 1) {
@@ -416,6 +439,9 @@ class Board extends Component {
   };
 
   applyGrowth = (r, c) => {
+
+    new Audio(audio_grass).play();
+
     alert("Special effect triggered: Growth!\nYou gain a new tile!");
     const { board, currentPlayer } = this.state;
     let determinant = true;
@@ -424,7 +450,9 @@ class Board extends Component {
       const rand_num = Math.floor(Math.random() * 3);
       switch (rand_num) {
         case 0:
-          if (r > 1 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
+
+          if (r > 0 && (board[r - 1][c] === null || board[r - 1][c] === 3)) {
+
             board[r - 1][c] = currentPlayer;
             determinant = false;
           }
@@ -549,6 +577,7 @@ class Board extends Component {
         </table>
         <br />
         <br />
+
         <div className="button-row">
           <div
             className="button"
@@ -562,6 +591,7 @@ class Board extends Component {
           <div className="button" onClick={this.handleMusicToggle}>
             {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
           </div>
+
         </div>
 
         <audio ref={this.audioRef} src={backgroundMusic} loop />
