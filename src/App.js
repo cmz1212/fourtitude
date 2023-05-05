@@ -89,7 +89,7 @@ class App extends Component {
                 }
                 {<br />}{" "}
                 {<br />}Ice: Icy blockers added to empty spaces above and beside
-                the plyed tile!{<br />}
+                the played tile!{<br />}
                 {
                   <img
                     src={ice}
