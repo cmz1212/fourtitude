@@ -25,4 +25,4 @@ Click on button on the left to check how many games each player has won as well 
 If you drop a tile onto the tile with question mark, you have triggered a special tile! One of four special effects will be triggered! For more information on what the speciall effects do, check ot the help button on the top right of the screen.
 
 **Insert a picture of spcial tile and help button
-![question mark](./src/img/question.png)
+![question mark](./src/img/question.png | width=30| height=30)
