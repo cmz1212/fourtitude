@@ -1,4 +1,4 @@
-# Connect 4 
+# Fourtitude
 
 Simple Single Page Connect Four Game/App built with ReactJs. This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 

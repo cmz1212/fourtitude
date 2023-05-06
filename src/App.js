@@ -63,13 +63,14 @@ class App extends Component {
             <div className="help-body" id="helpBody">
               <p id="description">
                 When a tile is dropped onto{" "}
-                <img src={qm} alt="question mark" width="25px" height="25px" />{" "}
+                <img  src={qm} alt="question mark" width="25px" height="25px" />{" "}
                 spaces, the following special effects may be triggered: {<br />}{" "}
                 {<br />}
                 Fire: Tiles right next to the played tile and immediately below
                 are removed!{<br />}
                 {
                   <img
+                  className="help-pic"
                     src={fire}
                     width="300px"
                     height="auto"
@@ -81,6 +82,7 @@ class App extends Component {
                 played tile are removed!{<br />}
                 {
                   <img
+                  className="help-pic"
                     src={thunder}
                     width="200px"
                     height="auto"
@@ -92,6 +94,7 @@ class App extends Component {
                 the played tile!{<br />}
                 {
                   <img
+                  className="help-pic"
                     src={ice}
                     width="300px"
                     height="auto"
@@ -105,6 +108,7 @@ class App extends Component {
                 {<br />}
                 {
                   <img
+                  className="help-pic"
                     src={growth}
                     width="300px"
                     height="auto"
