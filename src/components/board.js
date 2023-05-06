@@ -166,7 +166,7 @@ class Board extends Component {
             }
             for (let j = 0; j < 6 - r; j++) {
               this.dropTiles();
-              await this.delay(100);
+              await this.delay(200);
             }
 
             if (t1) {
