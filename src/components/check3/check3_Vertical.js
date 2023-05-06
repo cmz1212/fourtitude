@@ -6,7 +6,7 @@ function check3_Vertical(board, c4rows, c4columns) {
         if (
           board[r][c] === board[r - 1][c] &&
           board[r][c] === board[r - 2][c] &&
-          board[r - 3][c] === null
+          (board[r - 3][c] === null||board[r - 3][c] === 3)
         ) {
           score[board[r][c] - 1]++;
         }
