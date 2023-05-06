@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import "./../App.css";
 import Row from "./row.js";
+import checkAll from "./check4/checkAll.js";
 import check3_Vertical from "./check3/check3_Vertical.js";
 import check3_Horizontal from "./check3/check3_Horizontal.js";
 import check3_DiagonalLeft from "./check3/check3_DiagonalLeft.js";
 import check3_DiagonalRight from "./check3/check3_DiagonalRight.js";
-import Popup from "./status/Popup.js";
-import PopupIcon from "./status/PopupIcon.js";
+import Popup from "./stats_popup/Popup.js";
+import PopupIcon from "./stats_popup/PopupIcon.js";
+import NotifyContent from "./notifications/NotifyContent.js";
+
+import backgroundMusic from "./../sound/music.mp3";
 import audio_click from "./../sound/click.wav";
 import audio_drop from "./../sound/drop.wav";
 import audio_win from "./../sound/win.wav";
 import audio_draw from "./../sound/draw.wav";
-
-import backgroundMusic from "./../sound/music.mp3";
-
 import audio_fire from "./../sound/fire_burning.wav";
 import audio_thunder from "./../sound/thunder_cracking.wav";
 import audio_ice from "./../sound/ice_effect.mp3";
@@ -32,12 +33,15 @@ class Board extends Component {
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
+      Winner: 0,
       selector: [],
       board: [],
       gameOver: false,
       traps: [[], [], []],
       showPopup: false,
       isMusicPlaying: true,
+      showNotification: false,
+      notificationID: "",
     };
     this.audioRef = React.createRef();
     this.play = this.play.bind(this);
@@ -46,23 +50,42 @@ class Board extends Component {
     this.togglePopup = this.togglePopup.bind(this);
   }
 
-  handleMusicToggle = () => {
-    const audio = this.audioRef.current;
-    if (this.state.isMusicPlaying) {
-      audio.pause();
-    } else {
-      audio.play();
-    }
-    this.setState((prevState) => ({
-      isMusicPlaying: !prevState.isMusicPlaying,
-    }));
-  };
+  togglePlayer() {
+    return this.state.currentPlayer === this.state.player1
+      ? this.state.player2
+      : this.state.player1;
+  }
 
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup,
     });
   }
+
+  toggleNotification = (notificationID, currentPlayer) => {
+    this.setState({
+      showNotification: true,
+      notificationID,
+      currentPlayer,
+    });
+
+    setTimeout(() => {
+      this.setState({ showNotification: false });
+    }, 5000);
+  };
+
+  handleMusicToggle = () => {
+    const audio = this.audioRef.current;
+    if (this.state.isMusicPlaying) {
+      audio.pause();
+    } else {
+      audio.volume = 0.1;
+      audio.play();
+    }
+    this.setState((prevState) => ({
+      isMusicPlaying: !prevState.isMusicPlaying,
+    }));
+  };
 
   initBoard() {
     let selector = [];
@@ -124,14 +147,11 @@ class Board extends Component {
       board,
       currentPlayer: this.state.player1,
       gameOver: false,
+      Winner: 0,
       traps,
+      showNotification: false,
+      notificationID: "",
     });
-  }
-
-  togglePlayer() {
-    return this.state.currentPlayer === this.state.player1
-      ? this.state.player2
-      : this.state.player1;
   }
 
   play = async (col) => {
@@ -184,19 +204,33 @@ class Board extends Component {
           }
 
           //Check for potential winner
-          let result = this.checkAll(board);
+          let result = checkAll(board, c4rows, c4columns);
           if (result === this.state.player1) {
             new Audio(audio_win).play();
-            this.setState({ board, gameOver: true, p1Win: p1Win + 1 });
-            alert("Red Wins!");
+            this.setState({
+              board,
+              gameOver: true,
+              p1Win: p1Win + 1,
+              Winner: this.state.currentPlayer,
+            });
+            this.toggleNotification("win", this.state.currentPlayer);
           } else if (result === this.state.player2) {
             new Audio(audio_win).play();
-            this.setState({ board, gameOver: true, p2Win: p2Win + 1 });
-            alert("Yellow wins!");
+            this.setState({
+              board,
+              gameOver: true,
+              p2Win: p2Win + 1,
+              Winner: this.state.currentPlayer,
+            });
+            this.toggleNotification("win", this.state.currentPlayer);
           } else if (result === "draw") {
             new Audio(audio_draw).play();
-            this.setState({ board, gameOver: true });
-            alert("It's a draw!");
+            this.setState({
+              board,
+              gameOver: true,
+              Winner: 3,
+            });
+            this.toggleNotification("draw", this.state.currentPlayer);
           } else {
             this.setState({ board, currentPlayer: this.togglePlayer() });
             let c_name;
@@ -256,103 +290,13 @@ class Board extends Component {
     }
   }
 
-  //Check if player has connect 4 tiles vertically
-  checkVertical(board) {
-    for (let r = 3; r < c4rows; r++) {
-      for (let c = 0; c < c4columns; c++) {
-        if (board[r][c]) {
-          if (
-            board[r][c] === board[r - 1][c] &&
-            board[r][c] === board[r - 2][c] &&
-            board[r][c] === board[r - 3][c]
-          ) {
-            return board[r][c];
-          }
-        }
-      }
-    }
-  }
-
-  //Check if player has connect 4 tiles horizontally
-  checkHorizontal(board) {
-    for (let r = 0; r < c4rows; r++) {
-      for (let c = 0; c < 4; c++) {
-        if (board[r][c]) {
-          if (
-            board[r][c] === board[r][c + 1] &&
-            board[r][c] === board[r][c + 2] &&
-            board[r][c] === board[r][c + 3]
-          ) {
-            return board[r][c];
-          }
-        }
-      }
-    }
-  }
-
-  //Check if player has connect 4 tiles diagonally
-  checkDiagonalRight(board) {
-    for (let r = 3; r < c4rows; r++) {
-      for (let c = 0; c < 4; c++) {
-        if (board[r][c]) {
-          if (
-            board[r][c] === board[r - 1][c + 1] &&
-            board[r][c] === board[r - 2][c + 2] &&
-            board[r][c] === board[r - 3][c + 3]
-          ) {
-            return board[r][c];
-          }
-        }
-      }
-    }
-  }
-
-  //Check if player has connect 4 tiles diagonally
-  checkDiagonalLeft(board) {
-    for (let r = 3; r < c4rows; r++) {
-      for (let c = 3; c < c4columns; c++) {
-        if (board[r][c]) {
-          if (
-            board[r][c] === board[r - 1][c - 1] &&
-            board[r][c] === board[r - 2][c - 2] &&
-            board[r][c] === board[r - 3][c - 3]
-          ) {
-            return board[r][c];
-          }
-        }
-      }
-    }
-  }
-
-  //Declare draw if all spaces are filled but no winner
-  checkDraw(board) {
-    for (let r = 0; r < c4rows; r++) {
-      for (let c = 0; c < c4columns; c++) {
-        if (board[r][c] === null || board[r][c] === 3) {
-          return null;
-        }
-      }
-    }
-    return "draw";
-  }
-
-  checkAll(board) {
-    return (
-      this.checkVertical(board) ||
-      this.checkDiagonalRight(board) ||
-      this.checkDiagonalLeft(board) ||
-      this.checkHorizontal(board) ||
-      this.checkDraw(board)
-    );
-  }
-
   componentWillMount() {
     this.initBoard();
   }
 
   componentDidMount() {
     const audio = this.audioRef.current;
-    audio.volume = 0.2;
+    audio.volume = 0.1;
     audio.play();
   }
 
@@ -397,7 +341,7 @@ class Board extends Component {
   fireEffect = (r, c) => {
     new Audio(audio_fire).play();
 
-    alert("Special effect triggered: Fire!\nTiles around you are removed!");
+    this.toggleNotification("fire", this.state.currentPlayer);
     const { board, currentPlayer } = this.state;
     for (let i = c - 1; i <= c + 1; i++) {
       if (board[r][i] !== 3) {
@@ -417,9 +361,7 @@ class Board extends Component {
   thunderEffect = (r, c) => {
     new Audio(audio_thunder).play();
 
-    alert(
-      "Special effect triggered: Thunder!\nTiles in same column are removed!"
-    );
+    this.toggleNotification("thunder", this.state.currentPlayer);
     const board = this.state.board;
     for (let i = c4rows - 1; i > r; i--) {
       this.applyNull(i, c);
@@ -433,7 +375,7 @@ class Board extends Component {
   iceEffect = (r, c) => {
     new Audio(audio_ice).play();
 
-    alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
+    this.toggleNotification("ice", this.state.currentPlayer);
     const board = this.state.board;
     if (r >= 1) {
       board[r - 1][c] = 4;
@@ -453,7 +395,7 @@ class Board extends Component {
   growthEffect = (r, c) => {
     new Audio(audio_grass).play();
 
-    alert("Special effect triggered: Growth!\nYou gain a new tile!");
+    this.toggleNotification("growth", this.state.currentPlayer);
     const { board, currentPlayer } = this.state;
     let determinant = true;
 
@@ -490,9 +432,6 @@ class Board extends Component {
         determinant = false;
       }
     }
-    this.setState({
-      board,
-    });
 
     this.setState({ board });
   };
@@ -516,12 +455,27 @@ class Board extends Component {
       default:
     }
   }
-  render() {
-    const { gameOver, selector, currentPlayer, board, p1Win, p2Win } =
-      this.state;
 
-    const gameWinnerMessage =
-      currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+  render() {
+    const {
+      gameOver,
+      selector,
+      currentPlayer,
+      board,
+      p1Win,
+      p2Win,
+      showNotification,
+      notificationID,
+      Winner,
+    } = this.state;
+
+    let gameWinnerMessage = "";
+    if (Winner === 3) {
+      gameWinnerMessage = "It's a draw!";
+    } else {
+      gameWinnerMessage =
+        currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+    }
 
     const gameTurnMessage = `${
       currentPlayer === 1 ? "Red" : "Yellow"
@@ -585,6 +539,10 @@ class Board extends Component {
             ))}
           </tbody>
         </table>
+        {showNotification && (
+          <NotifyContent notificationID={notificationID} curr={currentPlayer} />
+        )}
+
         <br />
         <br />
 

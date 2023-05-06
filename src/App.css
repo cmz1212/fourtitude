@@ -99,6 +99,7 @@ table {
   background-image: url("./img/question.png");
   background-size: contain;
 }
+
 .freeze {
   background-color: #94c0ec;
 }
@@ -161,7 +162,6 @@ table {
   top: 20px;
   left: 65%;
   border-radius: 30px;
-
 }
 
 .btn-help {
@@ -178,46 +178,68 @@ table {
   top: 0;
   right: 0;
   cursor: pointer;
-  z-index:1;
+  z-index: 1;
 }
 
-.help-title{
+.help-title {
   /*width: 470px;*/
-  width:0;
-  height:60px;
+  width: 0;
+  height: 60px;
   background: linear-gradient(lightgrey, rgb(75, 6, 66));
   position: absolute;
   top: 0;
   left: 0px;
   border-radius: 30px 0 0 0;
 }
-.help-title h2{
-  margin:0;
-  padding:0;
-  color: white;
-  padding: 12px 35px;
-  display: none; 
 
-}
-.help-body{
-  width: 470px;
-   /*height: 570px; */
-  height: 0;
-  background: grey;
-  position: absolute;
-  top:60px;
-  left:0px;
-  text-align: justify;
-  border-radius: 0 0 30px 30px;
-}
-.help-body p{
-  margin:0;
-  padding:0;
+.help-title h2 {
+  margin: 0;
+  padding: 0;
   color: white;
   padding: 12px 35px;
   display: none;
-
 }
-.help-pic{
+
+.help-body {
+  width: 470px;
+  /*height: 570px; */
+  height: 0;
+  background: grey;
+  position: absolute;
+  top: 60px;
+  left: 0px;
+  text-align: justify;
+  border-radius: 0 0 30px 30px;
+}
+
+.help-body p {
+  margin: 0;
+  padding: 0;
+  color: white;
+  padding: 12px 35px;
+  display: none;
+}
+
+.help-pic {
   border-radius: 10px;
+}
+
+.NotifyContent {
+  position: absolute;
+  top: 60%; /* Adjust the vertical position */
+  left: 50%; /* Adjust the horizontal position */
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Ensure it overlaps other elements */
+}
+
+#Notify_Text {
+  font-family: "Squada One";
+  font-weight: bold;
+  font-size: 55px;
+  margin-top: 10px;
+  color: #04284b;
+  text-align: center;
+  border: 2px solid #04284b;
+  padding: 10px;
+  background: rgba(143, 197, 233, 0.2);
 }
