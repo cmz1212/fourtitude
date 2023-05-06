@@ -69,7 +69,7 @@ class Board extends Component {
     let board = [];
     let traps = [];
 
-    //Traps
+    //Initiate positions for the special effect tiles
     for (let i = 0; i < 3; i++) {
       let x = Math.floor(Math.random() * (c4rows - 1));
       let y = Math.floor(Math.random() * (c4columns - 2) + 1);
@@ -77,6 +77,7 @@ class Board extends Component {
       traps.push([x, y]);
     }
 
+    //Changing tile position if overlap with other special effect tiles
     while (traps[1].toString() === traps[0].toString()) {
       let x = Math.floor(Math.random() * (c4rows - 1));
       let y = Math.floor(Math.random() * (c4columns - 2) + 1);
@@ -92,7 +93,7 @@ class Board extends Component {
       traps[2].splice(0, 2, x, y);
     }
 
-    //Selector
+    //Creating Selector row
     for (let r = 0; r < 1; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
@@ -101,7 +102,7 @@ class Board extends Component {
       selector.push(row);
     }
 
-    //Board
+    //Creating Board status
     for (let r = 0; r < c4rows; r++) {
       let row = [];
       for (let c = 0; c < c4columns; c++) {
@@ -139,13 +140,18 @@ class Board extends Component {
     if (!this.state.gameOver) {
       let c = Number(col);
 
+      //Applying played tile
       for (let r = 5; r >= 0; r--) {
         if (!board[r][c] || board[r][c] === 3) {
           new Audio(audio_drop).play();
+
+          //If triggered special tile
           if (board[r][c] === 3) {
             board[r][c] = this.state.currentPlayer;
 
-            this.applyRandom(r, c);
+            this.triggerRandom(r, c);
+
+            //Restore display for special tiles after board cleanup
             let t1,
               t2,
               t3 = false;
@@ -159,7 +165,7 @@ class Board extends Component {
               t3 = true;
             }
             for (let j = 0; j < 6 - r; j++) {
-              this.applyDrop();
+              this.dropTiles();
               await this.delay(100);
             }
 
@@ -177,6 +183,7 @@ class Board extends Component {
             board[r][c] = this.state.currentPlayer;
           }
 
+          //Check for potential winner
           let result = this.checkAll(board);
           if (result === this.state.player1) {
             new Audio(audio_win).play();
@@ -211,6 +218,7 @@ class Board extends Component {
     }
   };
 
+  //Display tile at selector row and play position on mouse over
   hoverDisplay(board, c, curr) {
     let audio = new Audio(audio_click);
     audio.volume = 0.1;
@@ -236,6 +244,7 @@ class Board extends Component {
     }
   }
 
+  //Restore board look on mouse out
   hoverOut(c) {
     const selector_name = "selector" + c.toString();
     const c_name = ["selector-open", "circle"].join(" ");
@@ -247,6 +256,7 @@ class Board extends Component {
     }
   }
 
+  //Check if player has connect 4 tiles vertically
   checkVertical(board) {
     for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
@@ -263,6 +273,7 @@ class Board extends Component {
     }
   }
 
+  //Check if player has connect 4 tiles horizontally
   checkHorizontal(board) {
     for (let r = 0; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
@@ -279,6 +290,7 @@ class Board extends Component {
     }
   }
 
+  //Check if player has connect 4 tiles diagonally
   checkDiagonalRight(board) {
     for (let r = 3; r < c4rows; r++) {
       for (let c = 0; c < 4; c++) {
@@ -295,6 +307,7 @@ class Board extends Component {
     }
   }
 
+  //Check if player has connect 4 tiles diagonally
   checkDiagonalLeft(board) {
     for (let r = 3; r < c4rows; r++) {
       for (let c = 3; c < c4columns; c++) {
@@ -311,10 +324,11 @@ class Board extends Component {
     }
   }
 
+  //Declare draw if all spaces are filled but no winner
   checkDraw(board) {
     for (let r = 0; r < c4rows; r++) {
       for (let c = 0; c < c4columns; c++) {
-        if (board[r][c] === null) {
+        if (board[r][c] === null || board[r][c] === 3) {
           return null;
         }
       }
@@ -350,6 +364,7 @@ class Board extends Component {
     }
   }
 
+  //Function for removing a particular tile
   applyNull(r, c) {
     const board = this.state.board;
     if (0 <= r <= c4rows && 0 <= c <= c4columns) {
@@ -358,7 +373,9 @@ class Board extends Component {
   }
 
   delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  applyDrop = () => {
+
+  //Drop all suspending tiles to bottom-most row
+  dropTiles = () => {
     const board = this.state.board;
     for (let r = 4; r >= 0; r--) {
       for (let c = 0; c < 7; c++) {
@@ -376,7 +393,8 @@ class Board extends Component {
     });
   };
 
-  applyFire = (r, c) => {
+  //Trigger Fire special effect
+  fireEffect = (r, c) => {
     new Audio(audio_fire).play();
 
     alert("Special effect triggered: Fire!\nTiles around you are removed!");
@@ -395,7 +413,8 @@ class Board extends Component {
     });
   };
 
-  applyThunder = (r, c) => {
+  //Trigger Thunder special effect
+  thunderEffect = (r, c) => {
     new Audio(audio_thunder).play();
 
     alert(
@@ -410,7 +429,8 @@ class Board extends Component {
     });
   };
 
-  applyIce = (r, c) => {
+  //Trigger Fire special effect
+  iceEffect = (r, c) => {
     new Audio(audio_ice).play();
 
     alert("Special effect triggered: Ice!\nSpaces around you will be frozen!");
@@ -429,7 +449,8 @@ class Board extends Component {
     });
   };
 
-  applyGrowth = (r, c) => {
+  //Trigger Growth special effect
+  growthEffect = (r, c) => {
     new Audio(audio_grass).play();
 
     alert("Special effect triggered: Growth!\nYou gain a new tile!");
@@ -476,20 +497,21 @@ class Board extends Component {
     this.setState({ board });
   };
 
-  applyRandom(r, c) {
+  //Randomly trigger one of four special effects
+  triggerRandom(r, c) {
     const rand_num = Math.floor(Math.random() * 4);
     switch (rand_num) {
       case 0:
-        this.applyFire(r, c);
+        this.fireEffect(r, c);
         break;
       case 1:
-        this.applyThunder(r, c);
+        this.thunderEffect(r, c);
         break;
       case 2:
-        this.applyIce(r, c);
+        this.iceEffect(r, c);
         break;
       case 3:
-        this.applyGrowth(r, c);
+        this.growthEffect(r, c);
         break;
       default:
     }
@@ -516,10 +538,7 @@ class Board extends Component {
           {gameOver ? gameWinnerMessage : gameTurnMessage}
         </span>
 
-        <PopupIcon
-          onClick={this.togglePopup}
-          
-        />
+        <PopupIcon onClick={this.togglePopup} />
         {this.state.showPopup && (
           <Popup
             onClose={this.togglePopup}

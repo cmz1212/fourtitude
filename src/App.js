@@ -63,60 +63,56 @@ class App extends Component {
             <div className="help-body" id="helpBody">
               <p id="description">
                 When a tile is dropped onto{" "}
-                <img  src={qm} alt="question mark" width="25px" height="25px" />{" "}
+                <img src={qm} alt="question mark" width="25px" height="25px" />{" "}
                 spaces, the following special effects may be triggered: {<br />}{" "}
                 {<br />}
                 Fire: Tiles right next to the played tile and immediately below
                 are removed!{<br />}
                 {
                   <img
-                  className="help-pic"
+                    className="help-pic"
                     src={fire}
                     width="300px"
                     height="auto"
                     alt="help of fire effect"
                   />
                 }
-                {<br />}{" "}
-                {<br />}Thunder: All tiles in the same column and below the
-                played tile are removed!{<br />}
+                {<br />} {<br />}Thunder: All tiles in the same column and below
+                the played tile are removed!{<br />}
                 {
                   <img
-                  className="help-pic"
+                    className="help-pic"
                     src={thunder}
                     width="200px"
                     height="auto"
                     alt="help of thunder effect"
                   />
                 }
-                {<br />}{" "}
-                {<br />}Ice: Icy blockers added to empty spaces above and beside
-                the played tile!{<br />}
+                {<br />} {<br />}Ice: Icy blockers added to empty spaces above
+                and beside the played tile!{<br />}
                 {
                   <img
-                  className="help-pic"
+                    className="help-pic"
                     src={ice}
                     width="300px"
                     height="auto"
                     alt="help of ice effect"
                   />
                 }
-                {<br />}{" "}
-                {<br />}
+                {<br />} {<br />}
                 Growth: Spawn a random tile in one of the empty spaces adjacent
                 to played tile!
                 {<br />}
                 {
                   <img
-                  className="help-pic"
+                    className="help-pic"
                     src={growth}
                     width="300px"
                     height="auto"
                     alt="help of growth effect"
                   />
                 }
-                {<br />}{" "}
-                {<br />}Click on ? again to hide this panel.
+                {<br />} {<br />}Click on ? again to hide this panel.
               </p>
             </div>
           </div>
