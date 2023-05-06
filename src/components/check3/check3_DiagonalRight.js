@@ -9,10 +9,10 @@ function check3_DiagonalRight(board, c4rows, c4columns) {
           board[r][c] === board[r - 1][c + 1] &&
           board[r][c] === board[r - 2][c + 2]
         ) {
-          if (board[r + 1][c - 1] === null) {
+          if (board[r + 1][c - 1] === null || board[r + 1][c - 1] === 3) {
             score[board[r][c] - 1]++;
           }
-          if (board[r - 3][c + 3] === null) {
+          if (board[r - 3][c + 3] === null || board[r - 3][c + 3] === 3) {
             score[board[r][c] - 1]++;
           }
         } else if (
@@ -22,7 +22,10 @@ function check3_DiagonalRight(board, c4rows, c4columns) {
             2 &&
           (board[r - 1][c + 1] === null ||
             board[r - 2][c + 2] === null ||
-            board[r - 3][c + 3] === null)
+            board[r - 3][c + 3] === null ||
+            board[r - 1][c + 1] === 3 ||
+            board[r - 2][c + 2] === 3 ||
+            board[r - 3][c + 3] === 3)
         ) {
           score[board[r][c] - 1]++;
         }

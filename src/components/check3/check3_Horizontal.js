@@ -8,18 +8,24 @@ function check3_Horizontal(board, c4rows, c4columns) {
           board[r][c] === board[r][c + 2]
         ) {
           if (c === 0) {
-            if (board[r][c + 3] === null && board[r][c] !== board[r][c + 4]) {
+            if (
+              (board[r][c + 3] === null || board[r][c + 3] === 3) &&
+              board[r][c] !== board[r][c + 4]
+            ) {
               score[board[r][c] - 1]++;
             }
           } else if (c === 4) {
-            if (board[r][c - 1] === null && board[r][c] !== board[r][c - 2]) {
+            if (
+              (board[r][c - 1] === null || board[r][c - 1] === 3) &&
+              board[r][c] !== board[r][c - 2]
+            ) {
               score[board[r][c] - 1]++;
             }
           } else {
-            if (board[r][c - 1] === null) {
+            if (board[r][c - 1] === null || board[r][c - 1] === 3) {
               score[board[r][c] - 1]++;
             }
-            if (board[r][c + 3] === null) {
+            if (board[r][c + 3] === null || board[r][c + 3] === 3) {
               score[board[r][c] - 1]++;
             }
           }
@@ -30,7 +36,10 @@ function check3_Horizontal(board, c4rows, c4columns) {
             2 &&
           (board[r][c + 1] === null ||
             board[r][c + 2] === null ||
-            board[r][c + 3] === null)
+            board[r][c + 3] === null ||
+            board[r][c + 1] === 3 ||
+            board[r][c + 2] === 3 ||
+            board[r][c + 3] === 3)
         ) {
           if (c === 2) {
             if (board[r][c] !== board[r][c - 1]) {
