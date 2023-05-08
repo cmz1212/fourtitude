@@ -132,7 +132,7 @@ table {
   transition: background-color 0.25s;
 }
 .playerBrown {
-  background-color: brown;
+  background-color: rgb(105, 31, 31);
   transition: background-color 0.25s;
 }
 
@@ -182,7 +182,7 @@ table {
   font: 30px "Squada One", cursive;
 }
 #Brown-Stats {
-  color: brown;
+  color: rgb(105, 31, 31);
   font: 30px "Squada One", cursive;
 }
 .help-container {

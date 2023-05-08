@@ -28,7 +28,7 @@ class Board extends Component {
     super(props);
 
     this.state = {
-      player1: 5,
+      player1: 6,
       player2: 7,
       currentPlayer: null,
       p1Win: 0,
@@ -61,7 +61,50 @@ class Board extends Component {
       showPopup: !this.state.showPopup,
     });
   }
-
+  changeP1Color(num) {
+    const { currentPlayer, player1, player2, board } = this.state;
+    if (player2 !== num) {
+      for (let r = 0; r < c4rows; r++) {
+        for (let c = 0; c < c4columns; c++)
+          if (board[r][c] === player1) {
+            board[r][c] = num;
+          }
+      }
+      if (currentPlayer === player1) {
+        this.setState({
+          currentPlayer: num,
+          player1: num,
+          board,
+        });
+      } else {
+        this.setState({
+          player1: num,
+          board,
+        });
+      }
+    }
+  }
+  changeP2Color(num) {
+    const { currentPlayer, player1, player2, board } = this.state;
+    if (player1 !== num) {
+      for (let r = 0; r < c4rows; r++) {
+        for (let c = 0; c < c4columns; c++)
+          if (board[r][c] === player2) {
+            board[r][c] = num;
+          }
+      }
+      if (currentPlayer === player2) {
+        this.setState({
+          currentPlayer: num,
+          player2: num,
+        });
+      } else {
+        this.setState({
+          player2: num,
+        });
+      }
+    }
+  }
   toggleNotification = (notificationID, currentPlayer) => {
     this.setState({
       showNotification: true,
@@ -613,7 +656,24 @@ class Board extends Component {
             {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
           </div>
         </div>
-
+        <div id="p1Colors" display="inline">
+          P1
+          <button onClick={() => this.changeP1Color(1)}>Red</button>
+          <button onClick={() => this.changeP1Color(2)}>Yellow</button>
+          <button onClick={() => this.changeP1Color(5)}>Green</button>
+          <button onClick={() => this.changeP1Color(6)}>Grey</button>
+          <button onClick={() => this.changeP1Color(7)}>Magenta</button>
+          <button onClick={() => this.changeP1Color(8)}>Brown</button>
+        </div>
+        <div id="p2Colors">
+          P2
+          <button onClick={() => this.changeP2Color(1)}>Red</button>
+          <button onClick={() => this.changeP2Color(2)}>Yellow</button>
+          <button onClick={() => this.changeP2Color(5)}>Green</button>
+          <button onClick={() => this.changeP2Color(6)}>Grey</button>
+          <button onClick={() => this.changeP2Color(7)}>Magenta</button>
+          <button onClick={() => this.changeP2Color(8)}>Brown</button>
+        </div>
         <audio ref={this.audioRef} src={backgroundMusic} loop />
       </div>
     );
