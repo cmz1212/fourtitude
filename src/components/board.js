@@ -28,8 +28,8 @@ class Board extends Component {
     super(props);
 
     this.state = {
-      player1: 1,
-      player2: 2,
+      player1: 5,
+      player2: 7,
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
@@ -233,12 +233,25 @@ class Board extends Component {
             this.toggleNotification("draw", this.state.currentPlayer);
           } else {
             this.setState({ board, currentPlayer: this.togglePlayer() });
-            let c_name;
-
-            if (this.state.currentPlayer === 2) {
-              c_name = ["player1", "circle"].join(" ");
-            } else if (this.state.currentPlayer === 1) {
-              c_name = ["player2", "circle"].join(" ");
+            let c_name, space;
+            const value = this.state.currentPlayer;
+            if (value === 1) {
+              space = "player1";
+            } else if (value === 2) {
+              space = "player2";
+            } else if (value === 5) {
+              space = "playerGreen";
+            } else if (value === 6) {
+              space = "playerGrey";
+            } else if (value === 7) {
+              space = "playerPurple";
+            } else if (value === 8) {
+              space = "playerBrown";
+            }
+            if (this.state.currentPlayer === this.state.player1) {
+              c_name = [space, "circle"].join(" ");
+            } else if (this.state.currentPlayer === this.state.player2) {
+              c_name = [space, "circle"].join(" ");
             }
 
             document.getElementById("selector" + c.toString()).className =
@@ -256,12 +269,25 @@ class Board extends Component {
   hoverDisplay(board, c, curr) {
     let audio = new Audio(audio_click);
     audio.volume = 0.1;
-
-    let c_name = "";
+    let space;
     if (curr === 1) {
-      c_name = ["player1", "circle"].join(" ");
+      space = "player1";
     } else if (curr === 2) {
-      c_name = ["player2", "circle"].join(" ");
+      space = "player2";
+    } else if (curr === 5) {
+      space = "playerGreen";
+    } else if (curr === 6) {
+      space = "playerGrey";
+    } else if (curr === 7) {
+      space = "playerPurple";
+    } else if (curr === 8) {
+      space = "playerBrown";
+    }
+    let c_name = "";
+    if (curr === this.state.player1) {
+      c_name = [space, "circle"].join(" ");
+    } else if (curr === this.state.player2) {
+      c_name = [space, "circle"].join(" ");
     }
 
     document.getElementById("selector" + c.toString()).className =
@@ -467,6 +493,8 @@ class Board extends Component {
       showNotification,
       notificationID,
       Winner,
+      player1,
+      player2,
     } = this.state;
 
     let gameWinnerMessage = "";
@@ -474,16 +502,23 @@ class Board extends Component {
       gameWinnerMessage = "It's a draw!";
     } else {
       gameWinnerMessage =
-        currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+        currentPlayer === player1 ? `Player 1 Won !!!` : `Player 2 Won !!!`;
     }
 
     const gameTurnMessage = `${
-      currentPlayer === 1 ? "Red" : "Yellow"
+      currentPlayer === player1 ? "Player 1" : "Player 2"
     }'s Turn: Drop Token Below`;
 
-    const check3_Diagonals = check3_DiagonalLeft(board, c4rows, c4columns).map(
+    const check3_Diagonals = check3_DiagonalLeft(
+      board,
+      c4rows,
+      c4columns,
+      player1,
+      player2
+    ).map(
       (elem, index) =>
-        elem + check3_DiagonalRight(board, c4rows, c4columns)[index]
+        elem +
+        check3_DiagonalRight(board, c4rows, c4columns, player1, player2)[index]
     );
 
     return (
@@ -498,8 +533,22 @@ class Board extends Component {
             onClose={this.togglePopup}
             Player1Wins={p1Win}
             Player2Wins={p2Win}
-            OpensVertical={check3_Vertical(board, c4rows, c4columns)}
-            OpensHorizontal={check3_Horizontal(board, c4rows, c4columns)}
+            p1={player1}
+            p2={player2}
+            OpensVertical={check3_Vertical(
+              board,
+              c4rows,
+              c4columns,
+              player1,
+              player2
+            )}
+            OpensHorizontal={check3_Horizontal(
+              board,
+              c4rows,
+              c4columns,
+              player1,
+              player2
+            )}
             OpensDiagonals={check3_Diagonals}
           />
         )}
@@ -540,7 +589,11 @@ class Board extends Component {
           </tbody>
         </table>
         {showNotification && (
-          <NotifyContent notificationID={notificationID} curr={currentPlayer} />
+          <NotifyContent
+            notificationID={notificationID}
+            curr={currentPlayer}
+            p1={player1}
+          />
         )}
 
         <br />

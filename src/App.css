@@ -119,6 +119,22 @@ table {
   background-color: #c5bc15;
   transition: background-color 0.25s;
 }
+.playerGreen {
+  background-color: green;
+  transition: background-color 0.25s;
+}
+.playerGrey {
+  background-color: grey;
+  transition: background-color 0.25s;
+}
+.playerPurple {
+  background-color: magenta;
+  transition: background-color 0.25s;
+}
+.playerBrown {
+  background-color: brown;
+  transition: background-color 0.25s;
+}
 
 .text {
   display: flex;
@@ -153,7 +169,22 @@ table {
   color: #c5bc15;
   font: 30px "Squada One", cursive;
 }
-
+#Green-Stats {
+  color: green;
+  font: 30px "Squada One", cursive;
+}
+#Grey-Stats {
+  color: grey;
+  font: 30px "Squada One", cursive;
+}
+#Purple-Stats {
+  color: magenta;
+  font: 30px "Squada One", cursive;
+}
+#Brown-Stats {
+  color: brown;
+  font: 30px "Squada One", cursive;
+}
 .help-container {
   width: 500px;
   height: 950px;
