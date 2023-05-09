@@ -1,6 +1,6 @@
 import React from "react";
 
-const NotifyContent = ({ notificationID, curr }) => {
+const NotifyContent = ({ notificationID, curr, p1 }) => {
   let display_msg = "";
   if (notificationID === "fire") {
     display_msg = "Fire!\nTiles around you are removed!";
@@ -11,7 +11,7 @@ const NotifyContent = ({ notificationID, curr }) => {
   } else if (notificationID === "growth") {
     display_msg = "Growth!\nYou gain a new tile!";
   } else if (notificationID === "win") {
-    display_msg = (curr === 1 ? "Red" : "Yellow") + " Wins!";
+    display_msg = (curr === p1 ? "Player 1" : "Player 2") + " Wins!";
   } else if (notificationID === "draw") {
     display_msg = "It's a draw!";
   }

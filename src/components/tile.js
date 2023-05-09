@@ -31,6 +31,17 @@ class Tile extends Component {
       space = "trap";
     }else if (value === 4) {
       space = "freeze";
+    }else if (value === 5) {
+      space = "playerGreen";
+    }
+    else if (value === 6) {
+      space = "playerGrey";
+    }
+    else if (value === 7) {
+      space = "playerPurple";
+    }
+    else if (value === 8) {
+      space = "playerBrown";
     }
 
 

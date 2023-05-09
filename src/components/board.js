@@ -39,6 +39,7 @@ class Board extends Component {
       gameOver: false,
       traps: [[], [], []],
       showPopup: false,
+      showColor: false,
       isMusicPlaying: true,
       showNotification: false,
       notificationID: "",
@@ -48,6 +49,8 @@ class Board extends Component {
     this.hoverDisplay = this.hoverDisplay.bind(this);
     this.hoverOut = this.hoverOut.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.displayBtn = this.displayBtn.bind(this);
+  
   }
 
   togglePlayer() {
@@ -61,7 +64,81 @@ class Board extends Component {
       showPopup: !this.state.showPopup,
     });
   }
+  displayBtn() {
+    this.setState({
+      showColor: !this.state.showColor,
+    });
+    if (this.state.showColor) {
+      this.displayColor();
+    } else {
+      this.hideColor();
+    }
+  }
 
+  displayColor() {
+    let titleWidth = 570;
+    let bodyHeight = 270;
+
+    document.getElementById("cHeading").style.display = "block";
+    document.getElementById("p1Colors").style.display = "block";
+    document.getElementById("p2Colors").style.display = "block";
+    document.getElementById("colorBody").style.height = bodyHeight + "px";
+    document.getElementById("colorBody").style.border="1px  solid black";
+    document.getElementById("colorTitle").style.width = titleWidth + "px";
+  }
+  hideColor() {
+    let titleWidth = 0;
+    let bodyHeight = 0;
+
+    document.getElementById("colorTitle").style.width = titleWidth + "px";
+    document.getElementById("cHeading").style.display = "none";
+    document.getElementById("colorBody").style.height = bodyHeight + "px";
+    document.getElementById("colorBody").style.border="0px";
+    document.getElementById("p1Colors").style.display = "none";
+    document.getElementById("p2Colors").style.display = "none";
+  }
+  changeP1Color(num) {
+    const { currentPlayer, player1, player2, board } = this.state;
+    if (player2 !== num) {
+      for (let r = 0; r < c4rows; r++) {
+        for (let c = 0; c < c4columns; c++)
+          if (board[r][c] === player1) {
+            board[r][c] = num;
+          }
+      }
+      if (currentPlayer === player1) {
+        this.setState({
+          currentPlayer: num,
+          player1: num,
+        });
+      } else {
+        this.setState({
+          player1: num,
+        });
+      }
+    }
+  }
+  changeP2Color(num) {
+    const { currentPlayer, player1, player2, board } = this.state;
+    if (player1 !== num) {
+      for (let r = 0; r < c4rows; r++) {
+        for (let c = 0; c < c4columns; c++)
+          if (board[r][c] === player2) {
+            board[r][c] = num;
+          }
+      }
+      if (currentPlayer === player2) {
+        this.setState({
+          currentPlayer: num,
+          player2: num,
+        });
+      } else {
+        this.setState({
+          player2: num,
+        });
+      }
+    }
+  }
   toggleNotification = (notificationID, currentPlayer) => {
     this.setState({
       showNotification: true,
@@ -233,12 +310,25 @@ class Board extends Component {
             this.toggleNotification("draw", this.state.currentPlayer);
           } else {
             this.setState({ board, currentPlayer: this.togglePlayer() });
-            let c_name;
-
-            if (this.state.currentPlayer === 2) {
-              c_name = ["player1", "circle"].join(" ");
-            } else if (this.state.currentPlayer === 1) {
-              c_name = ["player2", "circle"].join(" ");
+            let c_name, space;
+            const value = this.state.currentPlayer;
+            if (value === 1) {
+              space = "player1";
+            } else if (value === 2) {
+              space = "player2";
+            } else if (value === 5) {
+              space = "playerGreen";
+            } else if (value === 6) {
+              space = "playerGrey";
+            } else if (value === 7) {
+              space = "playerPurple";
+            } else if (value === 8) {
+              space = "playerBrown";
+            }
+            if (this.state.currentPlayer === this.state.player1) {
+              c_name = [space, "circle"].join(" ");
+            } else if (this.state.currentPlayer === this.state.player2) {
+              c_name = [space, "circle"].join(" ");
             }
 
             document.getElementById("selector" + c.toString()).className =
@@ -256,12 +346,25 @@ class Board extends Component {
   hoverDisplay(board, c, curr) {
     let audio = new Audio(audio_click);
     audio.volume = 0.1;
-
-    let c_name = "";
+    let space;
     if (curr === 1) {
-      c_name = ["player1", "circle"].join(" ");
+      space = "player1";
     } else if (curr === 2) {
-      c_name = ["player2", "circle"].join(" ");
+      space = "player2";
+    } else if (curr === 5) {
+      space = "playerGreen";
+    } else if (curr === 6) {
+      space = "playerGrey";
+    } else if (curr === 7) {
+      space = "playerPurple";
+    } else if (curr === 8) {
+      space = "playerBrown";
+    }
+    let c_name = "";
+    if (curr === this.state.player1) {
+      c_name = [space, "circle"].join(" ");
+    } else if (curr === this.state.player2) {
+      c_name = [space, "circle"].join(" ");
     }
 
     document.getElementById("selector" + c.toString()).className =
@@ -289,6 +392,7 @@ class Board extends Component {
       document.getElementById(name).className = "tile";
     }
   }
+  
 
   componentWillMount() {
     this.initBoard();
@@ -467,6 +571,8 @@ class Board extends Component {
       showNotification,
       notificationID,
       Winner,
+      player1,
+      player2,
     } = this.state;
 
     let gameWinnerMessage = "";
@@ -474,16 +580,23 @@ class Board extends Component {
       gameWinnerMessage = "It's a draw!";
     } else {
       gameWinnerMessage =
-        currentPlayer === 1 ? `Red Won !!!` : `Yellow Won !!!`;
+        currentPlayer === player1 ? `Player 1 Won !!!` : `Player 2 Won !!!`;
     }
 
     const gameTurnMessage = `${
-      currentPlayer === 1 ? "Red" : "Yellow"
+      currentPlayer === player1 ? "Player 1" : "Player 2"
     }'s Turn: Drop Token Below`;
 
-    const check3_Diagonals = check3_DiagonalLeft(board, c4rows, c4columns).map(
+    const check3_Diagonals = check3_DiagonalLeft(
+      board,
+      c4rows,
+      c4columns,
+      player1,
+      player2
+    ).map(
       (elem, index) =>
-        elem + check3_DiagonalRight(board, c4rows, c4columns)[index]
+        elem +
+        check3_DiagonalRight(board, c4rows, c4columns, player1, player2)[index]
     );
 
     return (
@@ -498,8 +611,22 @@ class Board extends Component {
             onClose={this.togglePopup}
             Player1Wins={p1Win}
             Player2Wins={p2Win}
-            OpensVertical={check3_Vertical(board, c4rows, c4columns)}
-            OpensHorizontal={check3_Horizontal(board, c4rows, c4columns)}
+            p1={player1}
+            p2={player2}
+            OpensVertical={check3_Vertical(
+              board,
+              c4rows,
+              c4columns,
+              player1,
+              player2
+            )}
+            OpensHorizontal={check3_Horizontal(
+              board,
+              c4rows,
+              c4columns,
+              player1,
+              player2
+            )}
             OpensDiagonals={check3_Diagonals}
           />
         )}
@@ -540,7 +667,11 @@ class Board extends Component {
           </tbody>
         </table>
         {showNotification && (
-          <NotifyContent notificationID={notificationID} curr={currentPlayer} />
+          <NotifyContent
+            notificationID={notificationID}
+            curr={currentPlayer}
+            p1={player1}
+          />
         )}
 
         <br />
@@ -558,6 +689,84 @@ class Board extends Component {
 
           <div className="button" onClick={this.handleMusicToggle}>
             {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
+          </div>
+        </div>
+        <div className="color-container">
+          <button className="btn-color" id="btnColor" onClick={this.displayBtn}>
+            C
+          </button>
+
+          <div className="color-title" id="colorTitle">
+            <h2 id="cHeading">Change Tile Color</h2>
+            <div className="color-body" id="colorBody">
+              <div id="p1Colors">
+                <h3>P1</h3>
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(1)}
+                  id="Red1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(2)}
+                  id="Yellow1"
+                />
+                
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(5)}
+                  id="Green1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(6)}
+                  id="Grey1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(7)}
+                  id="Magenta1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(8)}
+                  id="Brown1"
+                />
+              </div>
+              <div id="p2Colors">
+                <h3>P2</h3>
+                <button
+                  className="colored-btn"
+                  id="Red2"
+                  onClick={() => this.changeP2Color(1)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Yellow2"
+                  onClick={() => this.changeP2Color(2)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Green2"
+                  onClick={() => this.changeP2Color(5)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Grey2"
+                  onClick={() => this.changeP2Color(6)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Magenta2"
+                  onClick={() => this.changeP2Color(7)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Brown2"
+                  onClick={() => this.changeP2Color(8)}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
