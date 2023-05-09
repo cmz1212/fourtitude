@@ -71,7 +71,7 @@ class Board extends Component {
 
     setTimeout(() => {
       this.setState({ showNotification: false });
-    }, 5000);
+    }, 2000);
   };
 
   handleMusicToggle = () => {
