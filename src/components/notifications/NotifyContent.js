@@ -20,7 +20,7 @@ const NotifyContent = ({ notificationID, curr, p1 }) => {
     <div className="NotifyContent">
       <center>
         <img
-          src={`%PUBLIC_URL%/images/${notificationID}.gif`}
+          src={`/images/${notificationID}.gif`}
           alt={notificationID}
           style={{ width: "300px", height: "300px" }}
         />
