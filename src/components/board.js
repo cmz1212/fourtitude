@@ -28,8 +28,8 @@ class Board extends Component {
     super(props);
 
     this.state = {
-      player1: 6,
-      player2: 7,
+      player1: 1,
+      player2: 2,
       currentPlayer: null,
       p1Win: 0,
       p2Win: 0,
@@ -39,6 +39,7 @@ class Board extends Component {
       gameOver: false,
       traps: [[], [], []],
       showPopup: false,
+      showColor: false,
       isMusicPlaying: true,
       showNotification: false,
       notificationID: "",
@@ -48,6 +49,8 @@ class Board extends Component {
     this.hoverDisplay = this.hoverDisplay.bind(this);
     this.hoverOut = this.hoverOut.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.displayBtn = this.displayBtn.bind(this);
+  
   }
 
   togglePlayer() {
@@ -60,6 +63,39 @@ class Board extends Component {
     this.setState({
       showPopup: !this.state.showPopup,
     });
+  }
+  displayBtn() {
+    this.setState({
+      showColor: !this.state.showColor,
+    });
+    if (this.state.showColor) {
+      this.displayColor();
+    } else {
+      this.hideColor();
+    }
+  }
+
+  displayColor() {
+    let titleWidth = 570;
+    let bodyHeight = 270;
+
+    document.getElementById("cHeading").style.display = "block";
+    document.getElementById("p1Colors").style.display = "block";
+    document.getElementById("p2Colors").style.display = "block";
+    document.getElementById("colorBody").style.height = bodyHeight + "px";
+    document.getElementById("colorBody").style.border="1px  solid black";
+    document.getElementById("colorTitle").style.width = titleWidth + "px";
+  }
+  hideColor() {
+    let titleWidth = 0;
+    let bodyHeight = 0;
+
+    document.getElementById("colorTitle").style.width = titleWidth + "px";
+    document.getElementById("cHeading").style.display = "none";
+    document.getElementById("colorBody").style.height = bodyHeight + "px";
+    document.getElementById("colorBody").style.border="0px";
+    document.getElementById("p1Colors").style.display = "none";
+    document.getElementById("p2Colors").style.display = "none";
   }
   changeP1Color(num) {
     const { currentPlayer, player1, player2, board } = this.state;
@@ -74,12 +110,10 @@ class Board extends Component {
         this.setState({
           currentPlayer: num,
           player1: num,
-          board,
         });
       } else {
         this.setState({
           player1: num,
-          board,
         });
       }
     }
@@ -358,6 +392,7 @@ class Board extends Component {
       document.getElementById(name).className = "tile";
     }
   }
+  
 
   componentWillMount() {
     this.initBoard();
@@ -656,24 +691,85 @@ class Board extends Component {
             {this.state.isMusicPlaying ? "Pause Music" : "Play Music"}
           </div>
         </div>
-        <div id="p1Colors" display="inline">
-          P1
-          <button onClick={() => this.changeP1Color(1)}>Red</button>
-          <button onClick={() => this.changeP1Color(2)}>Yellow</button>
-          <button onClick={() => this.changeP1Color(5)}>Green</button>
-          <button onClick={() => this.changeP1Color(6)}>Grey</button>
-          <button onClick={() => this.changeP1Color(7)}>Magenta</button>
-          <button onClick={() => this.changeP1Color(8)}>Brown</button>
+        <div className="color-container">
+          <button className="btn-color" id="btnColor" onClick={this.displayBtn}>
+            C
+          </button>
+
+          <div className="color-title" id="colorTitle">
+            <h2 id="cHeading">Change Tile Color</h2>
+            <div className="color-body" id="colorBody">
+              <div id="p1Colors">
+                <h3>P1</h3>
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(1)}
+                  id="Red1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(2)}
+                  id="Yellow1"
+                />
+                
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(5)}
+                  id="Green1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(6)}
+                  id="Grey1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(7)}
+                  id="Magenta1"
+                />
+                <button
+                  className="colored-btn"
+                  onClick={() => this.changeP1Color(8)}
+                  id="Brown1"
+                />
+              </div>
+              <div id="p2Colors">
+                <h3>P2</h3>
+                <button
+                  className="colored-btn"
+                  id="Red2"
+                  onClick={() => this.changeP2Color(1)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Yellow2"
+                  onClick={() => this.changeP2Color(2)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Green2"
+                  onClick={() => this.changeP2Color(5)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Grey2"
+                  onClick={() => this.changeP2Color(6)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Magenta2"
+                  onClick={() => this.changeP2Color(7)}
+                />
+                <button
+                  className="colored-btn"
+                  id="Brown2"
+                  onClick={() => this.changeP2Color(8)}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="p2Colors">
-          P2
-          <button onClick={() => this.changeP2Color(1)}>Red</button>
-          <button onClick={() => this.changeP2Color(2)}>Yellow</button>
-          <button onClick={() => this.changeP2Color(5)}>Green</button>
-          <button onClick={() => this.changeP2Color(6)}>Grey</button>
-          <button onClick={() => this.changeP2Color(7)}>Magenta</button>
-          <button onClick={() => this.changeP2Color(8)}>Brown</button>
-        </div>
+
         <audio ref={this.audioRef} src={backgroundMusic} loop />
       </div>
     );
