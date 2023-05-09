@@ -242,7 +242,7 @@ table {
   left: 0px;
   text-align: justify;
   border-radius: 0 0 30px 30px;
-  z-index:2;
+  z-index: 2;
 }
 
 .help-body p {
@@ -251,7 +251,6 @@ table {
   color: white;
   padding: 12px 35px;
   display: none;
-  
 }
 
 .help-pic {
@@ -294,7 +293,7 @@ table {
   z-index: 1;
 }
 .color-title {
-  /*width: 570px;*/
+  /*width: 470px;*/
   width: 0;
   height: 60px;
   background: linear-gradient(
@@ -331,14 +330,14 @@ table {
 
 .color-body {
   width: 470px;
-  /*height: 330px; */
+  /*height: 270px; */
   height: 0;
   background: lightskyblue;
   position: absolute;
   top: 60px;
   left: 0px;
   text-align: justify;
- 
+
   border-radius: 0 0 30px 30px;
 }
 
@@ -348,27 +347,33 @@ table {
   height: 50px;
   width: 50px;
   padding: 10px;
-border-radius:50%;
+  border-radius: 50%;
   display: inline-block;
 
   margin: 2px 7px;
 }
-#Red1,#Red2{
+#Red1,
+#Red2 {
   background-color: #a80d50;
 }
-#Yellow1,#Yellow2{
+#Yellow1,
+#Yellow2 {
   background-color: #c5bc15;
 }
-#Green1,#Green2{
+#Green1,
+#Green2 {
   background-color: green;
 }
-#Grey1,#Grey2{
+#Grey1,
+#Grey2 {
   background-color: grey;
 }
-#Magenta1,#Magenta2{
+#Magenta1,
+#Magenta2 {
   background-color: magenta;
 }
-#Brown1,#Brown2{
+#Brown1,
+#Brown2 {
   background-color: rgb(105, 31, 31);
 }
 
