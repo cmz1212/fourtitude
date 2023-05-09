@@ -76,7 +76,7 @@ class Board extends Component {
   }
 
   displayColor() {
-    let titleWidth = 570;
+    let titleWidth = 470;
     let bodyHeight = 270;
 
     document.getElementById("cHeading").style.display = "block";
