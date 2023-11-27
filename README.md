@@ -1,6 +1,6 @@
 # Fourtitude
 
-Connect Four Game/App built with ReactJs.
+Connect Four Game built with ReactJs.
 
 ### Gameplay
 
