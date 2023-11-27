@@ -1,4 +1,4 @@
-function check3_Horizontal(board, c4rows, c4columns, p1, p2) {
+export default function check3Horizontal (board, c4rows, c4columns, p1, p2) {
   let score = [0, 0];
   for (let r = 0; r < c4rows; r++) {
     for (let c = 0; c < c4columns - 3; c++) {
@@ -78,5 +78,3 @@ function check3_Horizontal(board, c4rows, c4columns, p1, p2) {
   }
   return score;
 }
-
-export default check3_Horizontal;

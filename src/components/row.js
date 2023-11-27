@@ -1,31 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import Tile from "./tile.js";
 
-class Row extends Component {
-  render() {
+export default function Row ({ selectorType, state, row, rowNum, play, hover, out, curr, c4rows }) {
+  const rowOutput = Object.keys(row).map((i) => (
+    <Tile key={i} selectorType={selectorType} state={state} value={row[i]} columnIndex={i} rowIndex={rowNum} play={play} hover={hover} out={out} curr={curr} c4rows={c4rows}/>
+  ));
 
-    const { selectorType, board, row, rowNum, play, hover, out, curr } =
-      this.props;
-
-    let rowOutput = Object.keys(row).map(function (i) {
-      return (
-        <Tile
-          selectorType={selectorType}
-          board={board}
-          value={row[i]}
-          columnIndex={i}
-          rowIndex={rowNum}
-          play={play}
-          hover={hover}
-          out={out}
-          curr={curr}
-        />
-      );
-
-    });
-
-    return <tr>{rowOutput}</tr>;
-  }
-}
-
-export default Row;
+  return <tr>{rowOutput}</tr>;
+};

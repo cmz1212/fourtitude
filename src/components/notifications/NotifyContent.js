@@ -6,7 +6,7 @@ import growth_gif from "../../img/growth.gif";
 import win_gif from "../../img/win.gif";
 import draw_gif from "../../img/draw.gif";
 
-const NotifyContent = ({ notificationID, curr, p1 }) => {
+export default function NotifyContent ({ notificationID, curr, p1 }) {
   let display_msg = "";
   let img_option = null;
 
@@ -33,17 +33,10 @@ const NotifyContent = ({ notificationID, curr, p1 }) => {
   return (
     <div className="NotifyContent">
       <center>
-        <img
-          src={img_option}
-          alt={notificationID}
-          style={{ width: "300px", height: "300px" }}
-        />
+        <img src={img_option} alt={notificationID} style={{ width: "300px", height: "300px" }} />{" "}
       </center>
-      <br />
-      <br />
+      {Array(7).fill(<br />)}
       <p id="Notify_Text">{display_msg}</p>
     </div>
   );
-};
-
-export default NotifyContent;
+}

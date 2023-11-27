@@ -1,4 +1,4 @@
-function check3_DiagonalRight(board, c4rows, c4columns, p1, p2) {
+export default function check3DiagonalRight (board, c4rows, c4columns, p1, p2) {
   let score = [0, 0];
   for (let r = c4rows - 1; r >= 3; r--) {
     for (let c = 0; c < c4columns - 3; c++) {
@@ -46,5 +46,3 @@ function check3_DiagonalRight(board, c4rows, c4columns, p1, p2) {
   }
   return score;
 }
-
-export default check3_DiagonalRight;

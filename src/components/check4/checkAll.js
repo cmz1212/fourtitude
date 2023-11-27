@@ -1,5 +1,5 @@
 //Check if player has connect 4 tiles vertically
-const checkVertical = (board, c4rows, c4columns) => {
+function checkVertical (board, c4rows, c4columns) {
   for (let r = 3; r < c4rows; r++) {
     for (let c = 0; c < c4columns; c++) {
       if (board[r][c]) {
@@ -13,10 +13,10 @@ const checkVertical = (board, c4rows, c4columns) => {
       }
     }
   }
-};
+}
 
 //Check if player has connect 4 tiles horizontally
-const checkHorizontal = (board, c4rows) => {
+function checkHorizontal (board, c4rows) {
   for (let r = 0; r < c4rows; r++) {
     for (let c = 0; c < 4; c++) {
       if (board[r][c]) {
@@ -30,10 +30,10 @@ const checkHorizontal = (board, c4rows) => {
       }
     }
   }
-};
+}
 
 //Check if player has connect 4 tiles diagonally
-const checkDiagonalRight = (board, c4rows) => {
+function checkDiagonalRight (board, c4rows) {
   for (let r = 3; r < c4rows; r++) {
     for (let c = 0; c < 4; c++) {
       if (board[r][c]) {
@@ -47,10 +47,10 @@ const checkDiagonalRight = (board, c4rows) => {
       }
     }
   }
-};
+}
 
 //Check if player has connect 4 tiles diagonally
-const checkDiagonalLeft = (board, c4rows, c4columns) => {
+function checkDiagonalLeft (board, c4rows, c4columns) {
   for (let r = 3; r < c4rows; r++) {
     for (let c = 3; c < c4columns; c++) {
       if (board[r][c]) {
@@ -64,10 +64,10 @@ const checkDiagonalLeft = (board, c4rows, c4columns) => {
       }
     }
   }
-};
+}
 
 //Declare draw if all spaces are filled but no winner
-const checkDraw = (board, c4rows, c4columns) => {
+function checkDraw (board, c4rows, c4columns) {
   for (let r = 0; r < c4rows; r++) {
     for (let c = 0; c < c4columns; c++) {
       if (board[r][c] === null || board[r][c] === 3) {
@@ -76,9 +76,9 @@ const checkDraw = (board, c4rows, c4columns) => {
     }
   }
   return "draw";
-};
+}
 
-const checkAll = (board, c4rows, c4columns) => {
+export default function checkAll (board, c4rows, c4columns) {
   return (
     checkVertical(board, c4rows, c4columns) ||
     checkDiagonalRight(board, c4rows) ||
@@ -86,6 +86,4 @@ const checkAll = (board, c4rows, c4columns) => {
     checkHorizontal(board, c4rows) ||
     checkDraw(board, c4rows, c4columns)
   );
-};
-
-export default checkAll;
+}

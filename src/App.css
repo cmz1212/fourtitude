@@ -119,18 +119,22 @@ table {
   background-color: #c5bc15;
   transition: background-color 0.25s;
 }
+
 .playerGreen {
   background-color: green;
   transition: background-color 0.25s;
 }
+
 .playerGrey {
   background-color: grey;
   transition: background-color 0.25s;
 }
+
 .playerPurple {
   background-color: magenta;
   transition: background-color 0.25s;
 }
+
 .playerBrown {
   background-color: rgb(105, 31, 31);
   transition: background-color 0.25s;
@@ -169,29 +173,33 @@ table {
   color: #c5bc15;
   font: 30px "Squada One", cursive;
 }
+
 #Green-Stats {
   color: green;
   font: 30px "Squada One", cursive;
 }
+
 #Grey-Stats {
   color: grey;
   font: 30px "Squada One", cursive;
 }
+
 #Purple-Stats {
   color: magenta;
   font: 30px "Squada One", cursive;
 }
+
 #Brown-Stats {
   color: rgb(105, 31, 31);
   font: 30px "Squada One", cursive;
 }
-/*CSS for help menu at top right*/
+
+/*Help menu at top right*/
 .help-container {
   width: 500px;
   height: 950px;
-  /* background: #eee; */
   position: absolute;
-  top: 20px;
+  top: 120px;
   left: 65%;
   border-radius: 30px;
 }
@@ -214,7 +222,6 @@ table {
 }
 
 .help-title {
-  /*width: 470px;*/
   width: 0;
   height: 60px;
   background: linear-gradient(lightgrey, rgb(75, 6, 66));
@@ -234,7 +241,6 @@ table {
 
 .help-body {
   width: 470px;
-  /*height: 570px; */
   height: 0;
   background: grey;
   position: absolute;
@@ -256,16 +262,17 @@ table {
 .help-pic {
   border-radius: 10px;
 }
-/*CSS for color changing menu*/
+
+/*Color changing menu at top right*/
 .color-container {
   width: 500px;
   height: 300px;
-  /* background: #eee; */
   position: absolute;
-  top: 100px;
+  top: 200px;
   left: 65%;
   border-radius: 30px;
 }
+
 .btn-color {
   width: 60px;
   height: 60px;
@@ -292,8 +299,8 @@ table {
   cursor: pointer;
   z-index: 1;
 }
+
 .color-title {
-  /*width: 470px;*/
   width: 0;
   height: 60px;
   background: linear-gradient(
@@ -311,11 +318,10 @@ table {
   left: 0px;
   border-radius: 30px 0 0 0;
 }
-#p1Colors,
-#p2Colors {
+
+#p1Colors, #p2Colors {
   margin: 0;
   padding: 0;
-
   padding: 0px 35px;
   display: none;
 }
@@ -330,18 +336,15 @@ table {
 
 .color-body {
   width: 470px;
-  /*height: 270px; */
   height: 0;
   background: lightskyblue;
   position: absolute;
   top: 60px;
   left: 0px;
   text-align: justify;
-
   border-radius: 0 0 30px 30px;
 }
 
-/*CSS for color buttons*/
 .colored-btn {
   border: none;
   height: 50px;
@@ -349,38 +352,37 @@ table {
   padding: 10px;
   border-radius: 50%;
   display: inline-block;
-
   margin: 2px 7px;
 }
-#Red1,
-#Red2 {
+
+#Red1, #Red2 {
   background-color: #a80d50;
 }
-#Yellow1,
-#Yellow2 {
+
+#Yellow1, #Yellow2 {
   background-color: #c5bc15;
 }
-#Green1,
-#Green2 {
+
+#Green1, #Green2 {
   background-color: green;
 }
-#Grey1,
-#Grey2 {
+
+#Grey1, #Grey2 {
   background-color: grey;
 }
-#Magenta1,
-#Magenta2 {
+
+#Magenta1, #Magenta2 {
   background-color: magenta;
 }
-#Brown1,
-#Brown2 {
+
+#Brown1, #Brown2 {
   background-color: rgb(105, 31, 31);
 }
 
 /*CSS for toggle notification data*/
 .NotifyContent {
   position: absolute;
-  top: 60%; /* Adjust the vertical position */
+  top: 65%; /* Adjust the vertical position */
   left: 50%; /* Adjust the horizontal position */
   transform: translate(-50%, -50%);
   z-index: 9999; /* Ensure it overlaps other elements */
@@ -389,11 +391,13 @@ table {
 #Notify_Text {
   font-family: "Squada One";
   font-weight: bold;
-  font-size: 55px;
-  margin-top: 10px;
+  font-size: 48px;
+  margin-top: 8px;
   color: #04284b;
   text-align: center;
-  border: 2px solid #04284b;
-  padding: 10px;
-  background: rgba(143, 197, 233, 0.2);
+  border: 1px solid #04284b;
+  border-radius: 20px;
+  padding: 30px;
+  background: #ddeef6;
+  min-width: 500px;
 }
