@@ -35,7 +35,7 @@ export default function NotifyContent ({ notificationID, curr, p1 }) {
       <center>
         <img src={img_option} alt={notificationID} style={{ width: "300px", height: "300px" }} />{" "}
       </center>
-      {Array(7).fill(<br />)}
+      {Array(6).fill(<br />)}
       <p id="Notify_Text">{display_msg}</p>
     </div>
   );
